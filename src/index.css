@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source not "./wireframe";
 
 @font-face { font-family: "Noto Sans Display"; src: url("/fonts/noto-sans-display.ttf") format("truetype"); font-style: normal; font-weight: 100 900; font-stretch: 62.5% 100%; font-display: swap; }
 @font-face { font-family: "Noto Sans Display"; src: url("/fonts/noto-sans-display-italic.ttf") format("truetype"); font-style: italic; font-weight: 100 900; font-stretch: 62.5% 100%; font-display: swap; }

@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@font-face { font-family: "Noto Sans Display"; src: url("/fonts/noto-sans-display.ttf") format("truetype"); font-style: normal; font-weight: 100 900; font-stretch: 62.5% 100%; font-display: swap; }
+@font-face { font-family: "Noto Sans Display"; src: url("/fonts/noto-sans-display-italic.ttf") format("truetype"); font-style: italic; font-weight: 100 900; font-stretch: 62.5% 100%; font-display: swap; }
+@font-face { font-family: "Inter"; src: url("/fonts/inter.ttf") format("truetype"); font-style: normal; font-weight: 100 900; font-display: swap; }
+
+/* Вайрфрейм намеренно монохромный: цвет и изображения появятся на этапе дизайна. */
+@theme inline {
+  --color-background: #fff;
+  --color-foreground: #1c1c1c;
+  --color-primary: #1c1c1c;
+  --color-primary-foreground: #fff;
+  --color-secondary: #efefef;
+  --color-secondary-foreground: #1c1c1c;
+  --color-muted: #f4f4f4;
+  --color-muted-foreground: #6b6b6b;
+  --color-accent: #ececec;
+  --color-accent-foreground: #1c1c1c;
+  --color-card: #fff;
+  --color-card-foreground: #1c1c1c;
+  --color-border: #d6d6d6;
+  --color-input: #d6d6d6;
+  --color-ring: #1c1c1c;
+  --color-destructive: #b42318;
+  --font-sans: "Inter", sans-serif;
+}
+
+body { margin: 0; min-width: 320px; font-family: "Inter", sans-serif; color: #1c1c1c; background: #fff; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+a:focus-visible, button:focus-visible { outline: 3px solid #1c1c1c; outline-offset: 3px; }
+
+.wf-display { font-family: "Noto Sans Display", sans-serif; font-weight: 900; font-stretch: 75%; font-variation-settings: "wdth" 75, "wght" 900; letter-spacing: -.04em; line-height: 1; text-transform: uppercase; }
+.wf-display em { font-style: italic; }
+.wf-ph { background-color: #ececec; background-image: linear-gradient(to top right, transparent calc(50% - 1px), #cfcfcf 50%, transparent calc(50% + 1px)), linear-gradient(to top left, transparent calc(50% - 1px), #cfcfcf 50%, transparent calc(50% + 1px)); }
+.wf-orbit { border: 2px dashed #bdbdbd; border-radius: 50%; }
+.wf-notes-off .wf-note { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
