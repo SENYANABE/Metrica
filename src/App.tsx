@@ -20,6 +20,21 @@ const questions = [
   { q: 'Где узнать условия доступа?', a: 'Уточните актуальные условия у команды Метрики через Telegram или напишите на metrica_start@mail.ru.' },
 ]
 
+function Logo() {
+  return <span className="logo"><img src="/brand/mark.svg" alt="" width="120" height="63" /><span>Метрика</span></span>
+}
+
+// Композиция из концепции Figma (узел 1215:306), координаты — в пикселях макета.
+function HeroArt() {
+  return <div className="hero-art" aria-hidden="true">
+    <span className="art-orbit art-orbit-top"><img src="/brand/orbit-top.svg" alt="" /></span>
+    <img className="art-wave" src="/brand/wave.svg" alt="" />
+    <span className="art-orbit art-orbit-bottom"><img src="/brand/orbit-bottom.svg" alt="" /></span>
+    <img className="art-objects" src="/brand/objects.webp" alt="" width="1358" height="1159" />
+    <img className="art-tutor" src="/brand/tutor.webp" alt="" width="1666" height="944" />
+  </div>
+}
+
 function ApplyButton({ light = false, className = '' }: { light?: boolean; className?: string }) {
   return <Button asChild size="lg" className={`cta ${light ? 'cta-mint' : ''} ${className}`}>
     <a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight aria-hidden="true" /></a>
@@ -34,26 +49,23 @@ export default function App() {
     <a className="skip-link" href="#main">Перейти к содержимому</a>
     <header className="header">
       <div className="container header-inner">
-        <a href="#" className="brand" aria-label="Метрика — на главную">Метрика<span className="brand-period">.</span></a>
+        <a href="#" className="brand" aria-label="Метрика — на главную"><Logo /></a>
         <nav className="desktop-nav" aria-label="Основная навигация">
           <a href="#process">Как это работает</a><a href="#possibilities">Возможности</a><a href="#questions">Вопросы</a>
         </nav>
-        <div className="header-actions"><ApplyButton /><Button variant="ghost" size="icon" className="menu-toggle" aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'} aria-expanded={menuOpen} aria-controls="mobile-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button></div>
+        <div className="header-actions"><ApplyButton light /><Button variant="ghost" size="icon" className="menu-toggle" aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'} aria-expanded={menuOpen} aria-controls="mobile-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button></div>
       </div>
       {menuOpen && <nav id="mobile-nav" className="mobile-nav container" aria-label="Мобильная навигация"><a onClick={closeMenu} href="#process">Как это работает</a><a onClick={closeMenu} href="#possibilities">Возможности</a><a onClick={closeMenu} href="#questions">Вопросы</a></nav>}
     </header>
 
     <main id="main">
       <section className="hero">
-        <div className="container">
-          <p className="eyebrow"><span className="status-dot" /> Платформа для онлайн-репетиторов</p>
-          <h1>Новое измерение<br /><em>обучения</em></h1>
-          <div className="hero-bottom">
-            <div className="hero-intro"><p className="lead">Готовьте занятия, проверяйте задания и следите за прогрессом учеников в одном пространстве.</p><div className="button-row"><ApplyButton /><Button asChild variant="link" className="text-action"><a href="#process">Как устроена Метрика <ArrowDown aria-hidden="true" /></a></Button></div></div>
-            <p className="hero-aside">От первого материала<br />до следующего шага ученика.</p>
-          </div>
-          <div className="hero-index" aria-label="Учебный процесс"><span>Материалы</span><ArrowRight aria-hidden="true" /><span>Занятия</span><ArrowRight aria-hidden="true" /><span>Задания</span><ArrowRight aria-hidden="true" /><span>Прогресс</span></div>
+        <div className="container hero-copy">
+          <h1>Новое <em>измерение</em> обучения</h1>
+          <p className="hero-lead">Платформа, где собрано<br /> всё для работы репетитора</p>
+          <div className="button-row"><ApplyButton light /><Button asChild variant="link" className="text-action"><a href="#process">Как устроена Метрика <ArrowDown aria-hidden="true" /></a></Button></div>
         </div>
+        <HeroArt />
       </section>
 
       <section id="process" className="section process-section">
@@ -86,6 +98,6 @@ export default function App() {
 
       <section className="final-section"><div className="container"><p className="eyebrow">Метрика / Пространство для обучения</p><h2>Откройте новое<br /><em>измерение занятий</em></h2><div className="final-bottom"><p>Познакомьтесь с Метрикой.<br />Оставьте заявку через Telegram.</p><ApplyButton light /></div></div></section>
     </main>
-    <footer className="footer"><div className="container footer-inner"><a className="footer-name" href="#">Метрика</a><a href="mailto:metrica_start@mail.ru">metrica_start@mail.ru</a><a href="https://outputs-livid-delta.vercel.app/legal/#privacy" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></div></footer>
+    <footer className="footer"><div className="container footer-inner"><a className="footer-name" href="#" aria-label="Метрика — на главную"><Logo /></a><a href="mailto:metrica_start@mail.ru">metrica_start@mail.ru</a><a href="https://outputs-livid-delta.vercel.app/legal/#privacy" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></div></footer>
   </>
 }
