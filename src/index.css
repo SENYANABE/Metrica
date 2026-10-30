@@ -125,7 +125,7 @@ p, li, figcaption span, .faq-list [data-slot="accordion-content"] { text-wrap: p
 .aud-copy p { margin-top: 24px; max-width: 26em; font-size: clamp(16px, 1.3vw, 20px); line-height: 1.5; }
 .aud-copy .cta { margin-top: 32px; }
 /* Все три композиции стоят в одной рамке: волна-«М» одного размера и в одном месте. */
-.aud-art { align-self: end; width: 100%; }
+.aud-art { align-self: center; width: 100%; }
 
 /* Как это работает: экран закреплён, пункты раскрываются (референс tokens.studio) */
 .how { padding-top: clamp(80px, 9vw, 160px); overflow-x: clip; }
@@ -204,7 +204,7 @@ button.how-item:hover h3 { color: var(--blue); }
 .sui-grid-progress { grid-template-columns: 1.2fr 1fr; }
 .sui-grid-progress .sui-stars { grid-row: 1 / span 2; }
 .sui-big { font-size: 9em !important; }
-.sui-big span { font-size: .35em; opacity: .6; }
+.sui-big span { font-family: var(--body); font-weight: 600; font-stretch: 100%; font-variation-settings: normal; letter-spacing: 0; text-transform: none; font-size: .2em; opacity: .75; }
 .sui-meter { display: block; height: 1em; margin-top: auto; border-radius: 1em; background: #ffffff33; overflow: hidden; }
 .sui-meter span { display: block; height: 100%; background: var(--mint); border-radius: 1em; }
 .sui-quote { font-size: 1.2em; color: var(--muted); }
@@ -257,7 +257,7 @@ button.how-item:hover h3 { color: var(--blue); }
 .w-reset { margin-top: 10px; border: 0; background: none; padding: 0; font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer; }
 .w-stars { width: 100%; max-width: 240px; text-align: center; }
 .w-stars-num { display: flex; align-items: flex-end; justify-content: center; gap: 6px; font-size: 88px; font-variant-numeric: tabular-nums; }
-.w-stars-num small { padding-bottom: 10px; font-size: 28px; color: #ffffff80; }
+.w-stars-num small { padding-bottom: 12px; font-family: var(--body); font-weight: 600; font-stretch: 100%; font-variation-settings: normal; font-size: 18px; letter-spacing: 0; text-transform: none; color: #ffffffb3; }
 .w-stars-label { margin-top: 2px; font-size: 13px; color: #c9cff3; }
 .dim.is-open .w-stars-label { color: #e6ecff; }
 .w-stars-bar { display: block; height: 8px; margin-top: 16px; border-radius: 8px; background: #ffffff26; overflow: hidden; }

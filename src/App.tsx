@@ -176,7 +176,7 @@ function StarCounter({ onUse }: { onUse: () => void }) {
   const [stars, setStars] = useState(18)
   const goal = 30
   return <div className="w-stars">
-    <p className="w-stars-num"><span key={stars} className="roll">{stars}</span><small>/ {goal}</small></p>
+    <p className="w-stars-num"><span key={stars} className="roll">{stars}</span><small>из {goal}</small></p>
     <p className="w-stars-label">звёзд до награды</p>
     <span className="w-stars-bar"><span style={{ width: `${(stars / goal) * 100}%` }} /></span>
     <button type="button" className="w-chip" onClick={() => { setStars(s => (s >= goal ? 18 : s + 1)); onUse() }}>{stars >= goal ? 'Начать заново' : '+ звезда'}</button>
@@ -345,7 +345,7 @@ export default function App() {
       <section className="final">
         <div className="container final-inner">
           <div className="final-copy">
-            <h2>Откройте новое <em>измерение занятий</em></h2>
+            <h2>Откройте новое <em>измерение</em> занятий</h2>
             <p>Познакомьтесь с Метрикой — оставьте заявку в Telegram.</p>
             <ApplyButton />
           </div>

@@ -70,7 +70,7 @@ function Progress() {
     <div className="sui-grid sui-grid-progress">
       <div className="sui-hero sui-stars">
         <small>Звёзды до награды</small>
-        <b className="sui-big">18<span> / 30</span></b>
+        <b className="sui-big">18<span> из 30</span></b>
         <span className="sui-hero-note">Ещё 12 звёзд — и награда</span>
         <span className="sui-meter"><span style={{ width: '60%' }} /></span>
       </div>
