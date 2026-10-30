@@ -11,7 +11,7 @@ const blocks = [
   { id: 'hero', n: '01', name: 'Баннер' },
   { id: 'audiences', n: '02', name: 'Для кого — карточки стопкой' },
   { id: 'how', n: '03', name: 'Как это работает' },
-  { id: 'try', n: '04', name: 'Попробуйте прямо здесь' },
+  { id: 'try', n: '04', name: 'Шагните в новое измерение' },
   { id: 'faq', n: '05', name: 'Вопросы' },
   { id: 'final', n: '06', name: 'Финальная заявка' },
 ]
@@ -139,14 +139,18 @@ function HowItWorks() {
 
 // Блок 4: мини-интерактивы в духе bencho.dev — посетитель трогает рабочие моменты репетитора.
 // Все данные — демонстрационные, из существующего демо.
-function Tile({ name, hint, className = '', children }: { name: string; hint: string; className?: string; children: ReactNode }) {
-  return <figure className={`group flex min-h-72 flex-col rounded-3xl bg-neutral-100 p-5 transition-colors hover:bg-neutral-200/70 ${className}`}>
+function Tile({ n, dim, name, hint, open, className = '', children }: { n: number; dim: string; name: string; hint: string; open: boolean; className?: string; children: ReactNode }) {
+  return <figure className={`group relative flex min-h-72 flex-col rounded-3xl p-5 transition-colors duration-500 ${open ? 'bg-neutral-200' : 'bg-neutral-100 hover:bg-neutral-200/60'} ${className}`}>
+    <div className="flex items-start justify-between gap-3">
+      <p className="text-xs uppercase tracking-widest text-neutral-500">Измерение {n}</p>
+      <span className={`flex size-6 items-center justify-center rounded-full text-xs transition-all duration-500 ${open ? 'scale-100 bg-neutral-900 text-white' : 'scale-90 border border-neutral-300 text-neutral-400'}`} aria-label={open ? 'открыто' : 'не открыто'}>{open ? <Check className="size-3.5" /> : n}</span>
+    </div>
     <div className="flex flex-1 items-center justify-center py-4">{children}</div>
-    <figcaption className="flex items-baseline justify-between gap-3 text-sm"><span className="font-semibold">{name}</span><span className="text-xs text-neutral-500">{hint}</span></figcaption>
+    <figcaption className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1"><span className="wf-display text-2xl">{dim}</span><span className="text-xs text-neutral-500">{open ? name : hint}</span></figcaption>
   </figure>
 }
 
-function SlideToCheck() {
+function SlideToCheck({ onUse }: { onUse: () => void }) {
   const [x, setX] = useState(0)
   const [done, setDone] = useState(false)
   const track = useRef<HTMLDivElement>(null)
@@ -162,7 +166,7 @@ function SlideToCheck() {
   }
   function up() {
     if (!drag.current) return
-    if (x > drag.current.max * 0.85) { setX(drag.current.max); setDone(true) } else setX(0)
+    if (x > drag.current.max * 0.85) { setX(drag.current.max); setDone(true); onUse() } else setX(0)
     drag.current = null
   }
   return <div className="w-full max-w-md rounded-2xl bg-white p-4 shadow-sm">
@@ -171,13 +175,13 @@ function SlideToCheck() {
     <p className="text-xs text-neutral-500">Решение_Артем.pdf · отправлено сегодня в 11:40</p>
     <div ref={track} className={`relative mt-4 h-12 overflow-hidden rounded-full ${done ? 'bg-neutral-900 text-white' : 'bg-neutral-100'}`}>
       <span className={`absolute inset-0 flex items-center justify-center text-sm ${done ? 'px-4' : 'pl-14 pr-4'}`}>{done ? 'Проверено — ученик увидит оценку' : 'Отметить проверенным →'}</span>
-      {!done && <button type="button" aria-label="Отметить проверенным" onPointerDown={down} onPointerMove={move} onPointerUp={up} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setDone(true) }} className="absolute left-0.5 top-0.5 flex size-11 touch-none items-center justify-center rounded-full bg-neutral-900 text-white transition-transform" style={{ transform: `translateX(${x}px)` }}><Check className="size-5" /></button>}
+      {!done && <button type="button" aria-label="Отметить проверенным" onPointerDown={down} onPointerMove={move} onPointerUp={up} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { setDone(true); onUse() } }} className="absolute left-0.5 top-0.5 flex size-11 touch-none items-center justify-center rounded-full bg-neutral-900 text-white transition-transform" style={{ transform: `translateX(${x}px)` }}><Check className="size-5" /></button>}
     </div>
     {done && <button type="button" className="mt-3 text-xs text-neutral-500 underline" onClick={() => { setDone(false); setX(0) }}>Вернуть на проверку</button>}
   </div>
 }
 
-function StarCounter() {
+function StarCounter({ onUse }: { onUse: () => void }) {
   const [stars, setStars] = useState(18)
   const goal = 30
   return <div className="w-full max-w-56 text-center">
@@ -187,16 +191,16 @@ function StarCounter() {
     </div>
     <p className="mt-1 text-xs text-neutral-500">звёзд до награды</p>
     <div className="mt-4 h-2 rounded-full bg-white"><div className="h-2 rounded-full bg-neutral-900 transition-all duration-500" style={{ width: `${(stars / goal) * 100}%` }} /></div>
-    <Button size="sm" variant="outline" className="mt-4 bg-white" onClick={() => setStars(s => (s >= goal ? 18 : s + 1))}>{stars >= goal ? 'Начать заново' : '+ звезда'}</Button>
+    <Button size="sm" variant="outline" className="mt-4 bg-white" onClick={() => { setStars(s => (s >= goal ? 18 : s + 1)); onUse() }}>{stars >= goal ? 'Начать заново' : '+ звезда'}</Button>
   </div>
 }
 
-function WeekStrip() {
+function WeekStrip({ onUse }: { onUse: () => void }) {
   const days = [['ПН', 28, []], ['ВТ', 29, ['16:00 · Арина', '18:00 · Артём']], ['СР', 30, ['15:00 · Артём']], ['ЧТ', 1, ['17:30 · Александр']], ['ПТ', 2, ['16:00 · Елизавета']], ['СБ', 3, []], ['ВС', 4, []]] as const
   const [day, setDay] = useState(2)
   return <div className="w-full max-w-sm">
     <div className="grid grid-cols-7 gap-1">
-      {days.map(([d, n, l], i) => <button key={d} type="button" onClick={() => setDay(i)} aria-pressed={day === i} className={`flex flex-col items-center rounded-xl py-2 text-xs transition-colors ${day === i ? 'bg-neutral-900 text-white' : 'bg-white hover:bg-neutral-50'}`}>
+      {days.map(([d, n, l], i) => <button key={d} type="button" onClick={() => { setDay(i); onUse() }} aria-pressed={day === i} className={`flex flex-col items-center rounded-xl py-2 text-xs transition-colors ${day === i ? 'bg-neutral-900 text-white' : 'bg-white hover:bg-neutral-50'}`}>
         <span className="opacity-70">{d}</span><span className="text-base font-semibold">{n}</span><span className={`mt-1 size-1.5 rounded-full ${l.length ? (day === i ? 'bg-white' : 'bg-neutral-900') : 'bg-transparent'}`} />
       </button>)}
     </div>
@@ -206,21 +210,21 @@ function WeekStrip() {
   </div>
 }
 
-function StudentFilter() {
+function StudentFilter({ onUse }: { onUse: () => void }) {
   const students = [['Артём Соловьёв', 'Математика · 7 класс', 'Нужно проверить ДЗ'], ['Арина Мошкова', 'Математика · 6 класс', 'Занятие завтра'], ['Александр Смуров', 'Физика · 9 класс', 'Все задания проверены'], ['Елизавета Терехова', 'Математика · 8 класс', 'Ожидаем ответ']]
   const filters = ['Все', 'Нужно проверить ДЗ', 'Занятие завтра']
   const [f, setF] = useState(0)
   const list = f === 0 ? students : students.filter(s => s[2] === filters[f])
   return <div className="w-full max-w-sm">
-    <div className="flex flex-wrap gap-1.5">{filters.map((t, i) => <button key={t} type="button" onClick={() => setF(i)} aria-pressed={f === i} className={`rounded-full px-3 py-1 text-xs transition-colors ${f === i ? 'bg-neutral-900 text-white' : 'bg-white hover:bg-neutral-50'}`}>{t}</button>)}</div>
+    <div className="flex flex-wrap gap-1.5">{filters.map((t, i) => <button key={t} type="button" onClick={() => { setF(i); onUse() }} aria-pressed={f === i} className={`rounded-full px-3 py-1 text-xs transition-colors ${f === i ? 'bg-neutral-900 text-white' : 'bg-white hover:bg-neutral-50'}`}>{t}</button>)}</div>
     <ul className="mt-3 space-y-1.5">{list.map(([n, s, st]) => <li key={n} className="wf-pop flex items-center justify-between gap-2 rounded-xl bg-white px-3 py-2"><span className="min-w-0"><span className="block truncate text-sm font-medium">{n}</span><span className="block text-xs text-neutral-500">{s}</span></span><Badge variant="secondary" className="shrink-0">{st}</Badge></li>)}</ul>
   </div>
 }
 
-function ParentCards() {
+function ParentCards({ onUse }: { onUse: () => void }) {
   const cards = [['Последняя работа', 'Квадратные уравнения · оценка 5', '«Хорошая работа! Все основные шаги верны.»'], ['Учёба в ритме', '12 занятий проведено', 'Следующее — завтра в 16:00'], ['Ближайшие занятия', 'Математика · завтра, 16:00', 'Артём Соловьёв · 7 класс']]
   const [top, setTop] = useState(0)
-  return <button type="button" onClick={() => setTop(t => (t + 1) % cards.length)} className="relative h-40 w-full max-w-xs" aria-label="Показать следующую карточку">
+  return <button type="button" onClick={() => { setTop(t => (t + 1) % cards.length); onUse() }} className="relative h-40 w-full max-w-xs" aria-label="Показать следующую карточку">
     {cards.map((c, i) => {
       const pos = (i - top + cards.length) % cards.length
       return <div key={c[0]} className="absolute inset-x-0 top-0 rounded-2xl bg-white p-4 text-left shadow-md transition-all duration-500" style={{ transform: `translateY(${pos * 14}px) scale(${1 - pos * 0.05})`, zIndex: cards.length - pos, opacity: pos > 1 ? 0.5 : 1 }}>
@@ -230,16 +234,58 @@ function ParentCards() {
   </button>
 }
 
+const dims = [
+  { dim: 'Без рутинных проверок', name: 'Проверка домашних заданий', hint: 'Перетащите кнопку вправо', wide: true },
+  { dim: 'Измерение роста', name: 'Звёзды за прогресс ученика', hint: 'Нажмите «+ звезда»' },
+  { dim: 'Измерение времени', name: 'Расписание недели', hint: 'Выберите день' },
+  { dim: 'Измерение учеников', name: 'Все ученики и их статусы', hint: 'Отфильтруйте список' },
+  { dim: 'Измерение семьи', name: 'Что видит родитель', hint: 'Нажмите на карточку' },
+]
+
 function Playground() {
+  const [open, setOpen] = useState<boolean[]>(dims.map(() => false))
+  const ref = useRef<HTMLDivElement>(null)
+  const [tilt, setTilt] = useState(1)
+  const count = open.filter(Boolean).length
+
+  // «Погружение»: плоскость плиток наклонена и выпрямляется, пока блок входит в экран.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setTilt(0); return }
+    function onScroll() {
+      const el = ref.current
+      if (!el) return
+      const top = el.getBoundingClientRect().top
+      setTilt(Math.min(Math.max((top - window.innerHeight * 0.5) / (window.innerHeight * 0.45), 0), 1))
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  const use = (i: number) => () => setOpen(o => (o[i] ? o : o.map((v, j) => (j === i ? true : v))))
+  const widgets = [SlideToCheck, StarCounter, WeekStrip, StudentFilter, ParentCards]
+
   return <div>
-    <h2 className="wf-display max-w-3xl text-[clamp(40px,5.5vw,72px)]">Попробуйте <em>прямо здесь</em></h2>
-    <p className="mt-5 max-w-xl text-neutral-600">Несколько моментов из рабочего дня репетитора в Метрике. Нажимайте, листайте, перетаскивайте. Данные — из демо.</p>
-    <div className="mt-10 grid gap-3 md:grid-cols-3">
-      <Tile name="Проверка ДЗ" hint="Перетащите кнопку" className="md:col-span-2"><SlideToCheck /></Tile>
-      <Tile name="Звёзды ученика" hint="Нажмите «+ звезда»"><StarCounter /></Tile>
-      <Tile name="Расписание" hint="Выберите день"><WeekStrip /></Tile>
-      <Tile name="Ученики" hint="Отфильтруйте"><StudentFilter /></Tile>
-      <Tile name="Что видит родитель" hint="Нажмите на карточку"><ParentCards /></Tile>
+    <div className="flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <h2 className="wf-display max-w-3xl text-[clamp(40px,5.5vw,72px)]">Шагните в <em>новое измерение</em></h2>
+        <p className="mt-5 max-w-xl text-neutral-600">Пять измерений работы репетитора — в одной Метрике. Откройте каждое: нажмите, перетащите, полистайте. Данные — из демо.</p>
+      </div>
+      <div className="flex items-center gap-3" aria-live="polite">
+        <div className="flex gap-1.5" aria-hidden="true">{open.map((v, i) => <span key={i} className={`h-2 w-6 rounded-full transition-colors duration-500 ${v ? 'bg-neutral-900' : 'bg-neutral-200'}`} />)}</div>
+        <span className="text-sm tabular-nums text-neutral-600">Открыто {count} из {dims.length}</span>
+      </div>
+    </div>
+    <div className="mt-10 [perspective:1400px]">
+      <div ref={ref} className="grid gap-3 will-change-transform md:grid-cols-3" style={{ transform: `rotateX(${tilt * 28}deg) scale(${1 - tilt * 0.08})`, transformOrigin: '50% 0%', opacity: 1 - tilt * 0.35 }}>
+        {dims.map((d, i) => { const W = widgets[i]; return <Tile key={d.dim} n={i + 1} dim={d.dim} name={d.name} hint={d.hint} open={open[i]} className={d.wide ? 'md:col-span-2' : ''}><W onUse={use(i)} /></Tile> })}
+      </div>
+    </div>
+    <div className={`mt-3 overflow-hidden rounded-3xl bg-neutral-900 text-white transition-all duration-700 ${count === dims.length ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`} aria-hidden={count !== dims.length}>
+      <div className="flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center sm:p-8">
+        <p className="wf-display text-3xl sm:text-4xl">Все пять измерений <em>открыты</em></p>
+        <Button asChild size="lg" variant="secondary" tabIndex={count === dims.length ? 0 : -1}><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
+      </div>
     </div>
   </div>
 }
@@ -325,9 +371,9 @@ export default function Wireframe() {
         <div className="mt-6"><Note><b>Референс 3 (tokens.studio):</b> при прокрутке экран справа закреплён, пункты слева по очереди раскрываются, полоска показывает прогресс. Экран вставлен в нашу букву М. Пункт можно нажать.</Note></div>
       </Block>
 
-      <Block id="try" n="04" name="Попробуйте прямо здесь" bg="белый; плитки — светло-голубые, акценты синие и мятные">
+      <Block id="try" n="04" name="Шагните в новое измерение" bg="белый; плитки — светло-голубые, открытые — синие, акценты мятные">
         <Playground />
-        <div className="mt-8"><Note><b>bencho.dev:</b> спокойная сетка плиток, в каждой — живое мини-действие. Блок 3 рассказывает, что умеет Метрика, а здесь посетитель сам это трогает. Все данные — из демо.</Note></div>
+        <div className="mt-8"><Note><b>bencho.dev:</b> сетка плиток, в каждой — живое мини-действие. Плитки — пять «измерений» работы репетитора. Плоскость наклонена и выпрямляется при входе в блок — эффект погружения. Открытые измерения отмечаются, после всех пяти появляется заявка.</Note></div>
       </Block>
 
       <Block id="faq" n="05" name="Вопросы" bg="белый">
