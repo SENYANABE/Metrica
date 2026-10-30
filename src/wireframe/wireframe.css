@@ -33,7 +33,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid #1c1c1c; outline-offs
 .wf-display em { font-style: italic; }
 .wf-ph { background-color: #ececec; background-image: linear-gradient(to top right, transparent calc(50% - 1px), #cfcfcf 50%, transparent calc(50% + 1px)), linear-gradient(to top left, transparent calc(50% - 1px), #cfcfcf 50%, transparent calc(50% + 1px)); }
 .wf-orbit { border: 2px dashed #bdbdbd; border-radius: 50%; }
-.wf-notes-off .wf-note { display: none; }
+/* Рабочие пометки для согласования: на сайте их не будет. */
+.wf-notes-off .wf-svc { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -22,12 +22,12 @@ const blocks = [
 
 // Статус утверждения: «в демо» — увидели в существующем демо, «уточнить» — нужно подтверждение команды.
 function Status({ ok, children }: { ok?: boolean; children: ReactNode }) {
-  return <Badge variant={ok ? 'secondary' : 'outline'} className={ok ? '' : 'border-dashed'}>{ok ? <Check /> : '?'} {children}</Badge>
+  return <Badge variant={ok ? 'secondary' : 'outline'} className={`wf-svc ${ok ? '' : 'border-dashed'}`}>{ok ? <Check /> : '?'} {children}</Badge>
 }
 
 // Пояснение для согласования: какой приём из референсов здесь используется и что будет в дизайне.
 function Note({ children }: { children: ReactNode }) {
-  return <aside className="wf-note rounded-md border border-dashed border-neutral-400 bg-white/80 px-3 py-2 text-xs leading-relaxed text-neutral-600">{children}</aside>
+  return <aside className="wf-svc rounded-md border border-dashed border-neutral-400 bg-white/80 px-3 py-2 text-xs leading-relaxed text-neutral-600">{children}</aside>
 }
 
 function Ph({ label, className = '', bottom = false }: { label: string; className?: string; bottom?: boolean }) {
@@ -43,9 +43,9 @@ function Pill({ children }: { children: ReactNode }) {
 function Block({ id, n, name, bg, children }: { id: string; n: string; name: string; bg: string; children: ReactNode }) {
   return <section id={id} className="overflow-x-clip border-b border-neutral-200 py-14 md:py-20">
     <div className="mx-auto w-[min(1180px,calc(100%-40px))]">
-      <div className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs uppercase tracking-widest text-neutral-500">
+      <div className="wf-svc mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs uppercase tracking-widest text-neutral-500">
         <span className="font-semibold text-neutral-900">{n} · {name}</span>
-        <span className="wf-note normal-case tracking-normal">Фон в дизайне: {bg}</span>
+        <span className="normal-case tracking-normal">Фон в дизайне: {bg}</span>
       </div>
       {children}
     </div>
@@ -68,17 +68,16 @@ const faq = [
 ]
 
 export default function Wireframe() {
-  const [notes, setNotes] = useState(true)
+  const [notes, setNotes] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
   return <div className={notes ? '' : 'wf-notes-off'}>
     {/* Служебная панель согласования */}
     <div className="bg-neutral-900 text-neutral-100">
       <div className="mx-auto flex w-[min(1180px,calc(100%-40px))] flex-wrap items-center justify-between gap-3 py-3 text-xs">
-        <p>Вайрфрейм v1 — только структура и смысл блоков. Цвет, фото и 3D появятся после утверждения.</p>
+        <p>{notes ? 'Показаны рабочие пометки: на сайте их не будет.' : 'Черновая схема страницы. Серые блоки с крестом — места для фото и картинок.'}</p>
         <div className="flex items-center gap-3">
-          <span className="hidden items-center gap-2 sm:flex"><Status ok>в демо</Status><Status>уточнить</Status></span>
-          <Button size="sm" variant="secondary" onClick={() => setNotes(!notes)}>{notes ? 'Скрыть пояснения' : 'Показать пояснения'}</Button>
+          <Button size="sm" variant="secondary" onClick={() => setNotes(!notes)}>{notes ? 'Скрыть пометки' : 'Показать рабочие пометки'}</Button>
         </div>
       </div>
     </div>
@@ -100,7 +99,7 @@ export default function Wireframe() {
     </header>
 
     {/* Карта страницы */}
-    <nav className="wf-note border-b border-neutral-200 bg-neutral-50" aria-label="Карта страницы">
+    <nav className="wf-svc border-b border-neutral-200 bg-neutral-50" aria-label="Карта страницы">
       <div className="mx-auto flex w-[min(1180px,calc(100%-40px))] gap-2 overflow-x-auto py-3 text-xs">
         {blocks.map(b => <a key={b.id} href={`#${b.id}`} className="shrink-0 rounded-full border border-neutral-300 bg-white px-3 py-1.5">{b.n} {b.name}</a>)}
       </div>
@@ -144,7 +143,7 @@ export default function Wireframe() {
               <h3 className="wf-display mt-2 text-5xl">{s.title}</h3>
               <ul className="mt-4 space-y-2 text-sm">{s.items.map(it => <li key={it} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0" />{it}</li>)}</ul>
               <div className="mt-4"><Status ok={s.ok}>{s.ok ? 'есть в демо' : 'уточнить у команды'}</Status></div>
-              <p className="wf-note mt-3 text-xs text-neutral-500">Экран на планшете: {s.screen}</p>
+              <p className="wf-svc mt-3 text-xs text-neutral-500">Экран на планшете: {s.screen}</p>
             </li>)}
           </ol>
         </div>
