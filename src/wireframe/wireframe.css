@@ -32,6 +32,9 @@ a:focus-visible, button:focus-visible { outline: 3px solid #1c1c1c; outline-offs
 .wf-display { font-family: "Noto Sans Display", sans-serif; font-weight: 900; font-stretch: 75%; font-variation-settings: "wdth" 75, "wght" 900; letter-spacing: -.04em; line-height: 1; text-transform: uppercase; }
 .wf-display em { font-style: italic; }
 .wf-ph { background-color: #ececec; background-image: linear-gradient(to top right, transparent calc(50% - 1px), #cfcfcf 50%, transparent calc(50% + 1px)), linear-gradient(to top left, transparent calc(50% - 1px), #cfcfcf 50%, transparent calc(50% + 1px)); }
+/* Буква М из логотипа как подложка для экранов и иллюстраций. */
+.wf-m { background: #d4d4d4; -webkit-mask: url("/brand/mark.svg") center / contain no-repeat; mask: url("/brand/mark.svg") center / contain no-repeat; }
+.wf-m-light { background: #ffffffb3; }
 .wf-orbit { border: 2px dashed #bdbdbd; border-radius: 50%; }
 /* Рабочие пометки для согласования: на сайте их не будет. */
 .wf-notes-off .wf-svc { display: none !important; }
