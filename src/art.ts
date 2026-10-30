@@ -13,7 +13,8 @@ export type Layer =
       screen?: { quad: [Point, Point, Point, Point] }
     }
 
-export type Art = { w: number; h: number; layers: Layer[] }
+// frame — видимая рамка композиции; если не задана, рамка совпадает с w × h.
+export type Art = { w: number; h: number; frame?: { x: number; y: number; w: number; h: number }; layers: Layer[] }
 
 // Слайд 1215:305 — репетитор с ноутбуком.
 export const heroArt: Art = {
@@ -30,6 +31,7 @@ export const heroArt: Art = {
 // Кадр 1351:401 — ноутбук; в дисплей подставляется экран Метрики.
 export const laptopArt: Art = {
   w: 1271, h: 1020,
+  frame: { x: 0, y: -9.53, w: 1271, h: 908 },
   layers: [
     { kind: 'orbit', src: '/brand/tutor-laptop/orbit-top.svg', x: 184.95, y: 88.91, w: 826.355, h: 490.423, iw: 775.112, ih: 300.033, rot: 15 },
     { kind: 'img', src: '/brand/tutor-laptop/wave.svg', x: 0, y: 230.47, w: 1271, h: 667.742 },
@@ -45,6 +47,7 @@ export const laptopArt: Art = {
 // Слайд 1215:326 — ученик с планшетом.
 export const studentArt: Art = {
   w: 1351, h: 882,
+  frame: { x: 80, y: -26, w: 1271, h: 908 },
   layers: [
     { kind: 'orbit', src: '/brand/student/orbit-top.svg', x: 330.99, y: 0, w: 957.553, h: 733.775, iw: 924.756, ih: 313.382, rot: 150 },
     { kind: 'img', src: '/brand/student/wave.svg', x: 80, y: 214, w: 1271, h: 667.742 },
@@ -57,6 +60,7 @@ export const studentArt: Art = {
 // Слайд 1215:342 — родитель с телефоном.
 export const parentArt: Art = {
   w: 1271, h: 887,
+  frame: { x: 0, y: -21, w: 1271, h: 908 },
   layers: [
     { kind: 'orbit', src: '/brand/parent/orbit-top.svg', x: 21, y: 0, w: 957.553, h: 733.775, iw: 924.756, ih: 313.382, rot: 30 },
     { kind: 'img', src: '/brand/parent/wave.svg', x: 0, y: 219, w: 1271, h: 667.742 },
@@ -69,6 +73,7 @@ export const parentArt: Art = {
 // Кадр 1351:185 — ИИ-звезда над стопкой тетрадей.
 export const aiArt: Art = {
   w: 1271, h: 882,
+  frame: { x: 0, y: -82.53, w: 1271, h: 908 },
   layers: [
     { kind: 'orbit', src: '/brand/ai/orbit-top.svg', x: 214.95, y: 97.91, w: 826.355, h: 490.423, iw: 775.112, ih: 300.033, rot: 15 },
     { kind: 'img', src: '/brand/ai/wave.svg', x: 0, y: 157.47, w: 1271, h: 667.742 },

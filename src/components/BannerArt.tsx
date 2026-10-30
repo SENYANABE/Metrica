@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import type { Art, Layer, Point } from '@/art'
 
 const px = (n: number) => `calc(${n} * var(--u))`
@@ -30,7 +30,7 @@ function quadTransform(w: number, h: number, q: [Point, Point, Point, Point]) {
 const SCREEN_W = 1920
 const SCREEN_H = 1245
 
-function Screen({ quad, src, layerW }: { quad: [Point, Point, Point, Point]; src: string; layerW: number }) {
+function Screen({ quad, layerW, children }: { quad: [Point, Point, Point, Point]; layerW: number; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(0)
   useEffect(() => {
@@ -42,25 +42,27 @@ function Screen({ quad, src, layerW }: { quad: [Point, Point, Point, Point]; src
   }, [layerW])
   const q = quad.map(([x, y]) => [x * scale, y * scale]) as [Point, Point, Point, Point]
   return <div ref={ref} className="art-screen" style={{ width: SCREEN_W, height: SCREEN_H, transform: scale ? quadTransform(SCREEN_W, SCREEN_H, q) : 'scale(0)' }}>
-    <img key={src} src={src} alt="" width={SCREEN_W} height={SCREEN_H} />
+    {children}
   </div>
 }
 
-function renderLayer(l: Layer, i: number, screen?: string) {
+function renderLayer(l: Layer, i: number, screen?: ReactNode) {
   if (l.kind === 'orbit') return <span key={i} className="art-orbit" style={box(l.x, l.y, l.w, l.h)}>
     <img src={l.src} alt="" style={{ width: px(l.iw), height: px(l.ih), transform: `translate(-50%, -50%) rotate(${l.rot}deg)` }} />
   </span>
   if (l.kind === 'img') return <img key={i} src={l.src} alt="" className={l.float ? 'art-float' : undefined} style={box(l.x, l.y, l.w, l.h)} />
   const mask = `url("${l.mask}") no-repeat ${px(l.mx)} ${px(l.my)} / ${px(l.mw)} ${px(l.mh)}`
   return <div key={i} className="art-masked" style={{ ...box(l.x, l.y, l.w, l.h), WebkitMask: mask, mask }}>
-    {l.screen && screen && <Screen quad={l.screen.quad} src={screen} layerW={l.w} />}
+    {l.screen && screen && <Screen quad={l.screen.quad} layerW={l.w}>{screen}</Screen>}
     <img src={l.src} alt="" />
   </div>
 }
 
 // Слоистая композиция баннера: масштабируется как единое целое от ширины контейнера.
-export function BannerArt({ art, className = '', screen }: { art: Art; className?: string; screen?: string }) {
-  return <div className={`art ${className}`} style={{ '--art-w': art.w, aspectRatio: `${art.w} / ${art.h}` } as CSSProperties} aria-hidden="true">
-    {art.layers.map((l, i) => renderLayer(l, i, screen))}
+// frame — общая рамка (по волне-«М»), чтобы разные композиции стояли одинаково; only — какие слои рисовать.
+export function BannerArt({ art, className = '', screen, only }: { art: Art; className?: string; screen?: ReactNode; only?: (l: Layer) => boolean }) {
+  const f = art.frame ?? { x: 0, y: 0, w: art.w, h: art.h }
+  return <div className={`art ${className}`} style={{ '--art-w': f.w, aspectRatio: `${f.w} / ${f.h}` } as CSSProperties} aria-hidden="true">
+    {art.layers.map((l, i) => (!only || only(l)) && renderLayer({ ...l, x: l.x - f.x, y: l.y - f.y }, i, screen))}
   </div>
 }
