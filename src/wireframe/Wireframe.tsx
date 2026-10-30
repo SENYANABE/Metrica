@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
-import { ArrowDown, ArrowUpRight, Check, Menu, X } from 'lucide-react'
+import { ArrowDown, Check, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
@@ -51,18 +51,17 @@ const audiences = [
 ]
 
 const features = [
-  { title: 'Расписание и занятия', text: 'Неделя занятий, ближайший урок, материалы и последнее домашнее задание ученика — перед глазами.', screen: 'Экран демо «Занятия под контролем»', ok: true },
-  { title: 'Ученики', text: 'Все ученики с предметом, классом и статусом: нужно проверить ДЗ, занятие завтра, ожидаем ответ.', screen: 'Экран демо «Мои ученики»', ok: true },
-  { title: 'Проверка ДЗ', text: 'Работы, которые ждут проверки. После проверки ученик видит оценку и комментарий, прогресс обновляется.', screen: 'Экран демо «Домашние задания»', ok: true },
-  { title: 'ИИ-помощник', text: 'Что именно делает ИИ при проверке — нужно подтвердить у команды. В демо этой функции нет.', screen: 'Экрана нет в демо', ok: false },
-  { title: 'Прогресс и награды', text: 'Ученик видит прогресс и звёзды до награды, родитель — оценки и комментарии репетитора.', screen: 'Экраны демо ученика и родителя', ok: true },
+  { title: 'Расписание и занятия', text: 'Неделя занятий, ближайший урок, материалы и последнее домашнее задание ученика — перед глазами.', screen: 'Экран «Занятия под контролем»', ok: true },
+  { title: 'Ученики', text: 'Все ученики с предметом, классом и статусом: нужно проверить ДЗ, занятие завтра, ожидаем ответ.', screen: 'Экран «Мои ученики»', ok: true },
+  { title: 'Проверка ДЗ', text: 'Работы, которые ждут проверки. После проверки ученик видит оценку и комментарий, прогресс обновляется.', screen: 'Экран «Домашние задания»', ok: true },
+  { title: 'ИИ-помощник', text: 'Помогает репетитору с проверкой домашних заданий. Что именно он делает — уточним у команды.', screen: 'Экран ИИ-помощника', ok: false },
+  { title: 'Прогресс и награды', text: 'Ученик видит прогресс и звёзды до награды, родитель — оценки и комментарии репетитора.', screen: 'Экраны ученика и родителя', ok: true },
 ]
 
 const faq = [
   { q: 'Для кого Метрика?', a: 'Для онлайн-репетиторов: занятия, ученики, домашние задания и прогресс в одном пространстве. Ученик и родитель видят свою часть процесса.', ok: true },
   { q: 'Что видят ученик и родитель?', a: 'Ученик — ближайшее занятие, материалы, домашнее задание и прогресс. Родитель — проведённые и ближайшие занятия, последнюю работу с оценкой и комментарием репетитора.', ok: true },
   { q: 'Кто ставит оценку — ИИ или репетитор?', a: 'Ответ нужно подтвердить у команды: что именно делает ИИ при проверке и остаётся ли решение за репетитором.', ok: false },
-  { q: 'Можно посмотреть платформу до заявки?', a: 'Да, в интерактивном демо: экраны репетитора, ученика и родителя.', ok: true },
   { q: 'Как оставить заявку?', a: 'Через Telegram-бота Метрики по кнопке «Оставить заявку».', ok: true },
   { q: 'Где узнать условия доступа?', a: 'У команды Метрики через Telegram или по почте metrica_start@mail.ru.', ok: true },
 ]
@@ -138,7 +137,7 @@ function HowItWorks() {
 }
 
 // Блок 4: мини-интерактивы в духе bencho.dev — посетитель трогает рабочие моменты репетитора.
-// Все данные — демонстрационные, из существующего демо.
+// Данные в плитках — примеры, взятые из демо продукта.
 function Tile({ n, dim, name, hint, open, className = '', children }: { n: number; dim: string; name: string; hint: string; open: boolean; className?: string; children: ReactNode }) {
   return <figure className={`group relative flex min-h-72 flex-col rounded-3xl p-5 transition-colors duration-500 ${open ? 'bg-neutral-200' : 'bg-neutral-100 hover:bg-neutral-200/60'} ${className}`}>
     <div className="flex items-start justify-between gap-3">
@@ -269,7 +268,7 @@ function Playground() {
     <div className="flex flex-wrap items-end justify-between gap-6">
       <div>
         <h2 className="wf-display max-w-3xl text-[clamp(40px,5.5vw,72px)]">Шагните в <em>новое измерение</em></h2>
-        <p className="mt-5 max-w-xl text-neutral-600">Пять измерений работы репетитора — в одной Метрике. Откройте каждое: нажмите, перетащите, полистайте. Данные — из демо.</p>
+        <p className="mt-5 max-w-xl text-neutral-600">Пять измерений работы репетитора — в одной Метрике. Откройте каждое: нажмите, перетащите, полистайте.</p>
       </div>
       <div className="flex items-center gap-3" aria-live="polite">
         <div className="flex gap-1.5" aria-hidden="true">{open.map((v, i) => <span key={i} className={`h-2 w-6 rounded-full transition-colors duration-500 ${v ? 'bg-neutral-900' : 'bg-neutral-200'}`} />)}</div>
@@ -284,7 +283,7 @@ function Playground() {
     <div className={`mt-3 overflow-hidden rounded-3xl bg-neutral-900 text-white transition-all duration-700 ${count === dims.length ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`} aria-hidden={count !== dims.length}>
       <div className="flex flex-col items-start justify-between gap-4 p-6 sm:flex-row sm:items-center sm:p-8">
         <p className="wf-display text-3xl sm:text-4xl">Все пять измерений <em>открыты</em></p>
-        <Button asChild size="lg" variant="secondary" tabIndex={count === dims.length ? 0 : -1}><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
+        <Button asChild size="lg" variant="secondary" tabIndex={count === dims.length ? 0 : -1}><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку</a></Button>
       </div>
     </div>
   </div>
@@ -310,7 +309,7 @@ export default function Wireframe() {
           <a href="#audiences">Для кого</a><a href="#how">Как это работает</a><a href="#try">Попробовать</a><a href="#faq">Вопросы</a>
         </nav>
         <div className="flex items-center gap-1">
-          <Button asChild size="sm" className="hidden sm:inline-flex"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
+          <Button asChild size="sm" className="hidden sm:inline-flex"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку</a></Button>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label={menuOpen ? 'Закрыть меню' : 'Открыть меню'} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</Button>
         </div>
       </div>
@@ -333,7 +332,7 @@ export default function Wireframe() {
             <h1 className="wf-display text-[clamp(52px,8vw,112px)]">Новое<br /><em>измерение</em><br />обучения</h1>
             <p className="mt-6 max-w-md text-lg leading-snug">Платформа, где собрано всё для работы репетитора.</p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
+              <Button asChild size="lg"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку</a></Button>
               <Button asChild size="lg" variant="ghost"><a href="#how">Как это работает <ArrowDown /></a></Button>
             </div>
           </div>
@@ -351,7 +350,7 @@ export default function Wireframe() {
                 <h2 className="wf-display mt-3 text-[clamp(40px,6vw,84px)]">{a.title}</h2>
                 <p className="mt-5 max-w-md text-base">{a.text}</p>
                 {a.cta
-                  ? <Button asChild size="lg" className="mt-7"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
+                  ? <Button asChild size="lg" className="mt-7"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку</a></Button>
                   : <Button asChild size="lg" variant="outline" className="mt-7 bg-transparent"><a href="#how">Как это работает <ArrowDown /></a></Button>}
               </div>
               <div className="relative aspect-[6/5]">
@@ -396,7 +395,7 @@ export default function Wireframe() {
           <div className="relative max-w-2xl">
             <h2 className="wf-display text-[clamp(44px,7vw,96px)]">Откройте новое <em>измерение занятий</em></h2>
             <p className="mt-5 text-neutral-600">Познакомьтесь с Метрикой — оставьте заявку в Telegram.</p>
-            <Button asChild size="lg" className="mt-7"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
+            <Button asChild size="lg" className="mt-7"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку</a></Button>
           </div>
           <div className="relative mt-10 flex gap-3 sm:absolute sm:bottom-10 sm:right-10 sm:mt-0 sm:w-56 sm:flex-col">
             <Ph label="3D: тетрадь с «5»" className="h-20 flex-1" /><Ph label="3D: монета с графиком" className="h-20 flex-1" />
@@ -417,7 +416,7 @@ export default function Wireframe() {
 
     {/* Телефон: закреплённая кнопка заявки */}
     <div className="fixed inset-x-0 bottom-0 z-30 border-t border-neutral-200 bg-white/95 p-3 backdrop-blur sm:hidden">
-      <Button asChild size="lg" className="w-full"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
+      <Button asChild size="lg" className="w-full"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку</a></Button>
     </div>
   </div>
 }
