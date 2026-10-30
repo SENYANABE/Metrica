@@ -39,7 +39,9 @@ export const laptopArt: Art = {
     {
       kind: 'masked', src: '/brand/tutor-laptop/photo-hole.webp', x: 266, y: -180, w: 1097, h: 1353,
       mask: '/brand/tutor-laptop/mask.svg', mx: -266, my: 180, mw: 1271, mh: 898.219,
-      screen: { quad: [[56.36, 427.36], [771.5, 309.84], [873.5, 803.25], [144.78, 936.31]] },
+      // Measured from the photo's alpha aperture (1129 × 1393), converted to
+      // this layer's coordinates, with a 3px overlap beneath the opaque bezel.
+      screen: { quad: [[44.6, 422.59], [777.68, 300.24], [880.38, 808.53], [142.0, 943.7]] },
     },
   ],
 }

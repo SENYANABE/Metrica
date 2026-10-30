@@ -36,7 +36,9 @@ function Screen({ quad, layerW, children }: { quad: [Point, Point, Point, Point]
   useEffect(() => {
     const el = ref.current?.parentElement
     if (!el) return
-    const ro = new ResizeObserver(() => setScale(el.offsetWidth / layerW))
+    // Keep subpixel precision: offsetWidth rounds the photo width and can
+    // leave a seam between the projected interface and the screen aperture.
+    const ro = new ResizeObserver(([entry]) => setScale(entry.contentRect.width / layerW))
     ro.observe(el)
     return () => ro.disconnect()
   }, [layerW])
