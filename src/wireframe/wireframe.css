@@ -25,6 +25,8 @@
   --font-sans: "Inter", sans-serif;
 }
 
+@layer base { *, ::before, ::after { border-color: var(--color-border); } }
+
 body { margin: 0; min-width: 320px; font-family: "Inter", sans-serif; color: #1c1c1c; background: #fff; }
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 a:focus-visible, button:focus-visible { outline: 3px solid #1c1c1c; outline-offset: 3px; }
@@ -35,10 +37,17 @@ a:focus-visible, button:focus-visible { outline: 3px solid #1c1c1c; outline-offs
 /* Буква М из логотипа как подложка для экранов и иллюстраций. */
 .wf-m { background: #d4d4d4; -webkit-mask: url("/brand/mark.svg") center / contain no-repeat; mask: url("/brand/mark.svg") center / contain no-repeat; }
 .wf-m-light { background: #ffffffb3; }
+.wf-m-dark { background: #737373; }
+/* Микро-анимации плиток блока 4. */
+.wf-roll { display: inline-block; animation: wf-roll .35s cubic-bezier(.2, .9, .3, 1.2); }
+.wf-pop { animation: wf-pop .3s ease-out both; }
+@keyframes wf-roll { from { transform: translateY(40%); opacity: 0; } }
+@keyframes wf-pop { from { transform: translateY(6px); opacity: 0; } }
 .wf-orbit { border: 2px dashed #bdbdbd; border-radius: 50%; }
 /* Рабочие пометки для согласования: на сайте их не будет. */
 .wf-notes-off .wf-svc { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .wf-roll, .wf-pop { animation: none; }
 }

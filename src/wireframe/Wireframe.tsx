@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowDown, ArrowUpRight, Check, Menu, Send, X } from 'lucide-react'
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react'
+import { ArrowDown, ArrowUpRight, Check, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 
 const telegram = 'https://t.me/MetricaEduBot'
@@ -12,10 +11,9 @@ const blocks = [
   { id: 'hero', n: '01', name: 'Баннер' },
   { id: 'audiences', n: '02', name: 'Для кого — карточки стопкой' },
   { id: 'how', n: '03', name: 'Как это работает' },
-  { id: 'connect', n: '04', name: 'Связь / проверка' },
-  { id: 'start', n: '05', name: 'Начало работы' },
-  { id: 'faq', n: '06', name: 'Вопросы' },
-  { id: 'final', n: '07', name: 'Финальная заявка' },
+  { id: 'try', n: '04', name: 'Попробуйте прямо здесь' },
+  { id: 'faq', n: '05', name: 'Вопросы' },
+  { id: 'final', n: '06', name: 'Финальная заявка' },
 ]
 
 // Статус утверждения: «в демо» — увидели в существующем демо, «уточнить» — нужно подтверждение команды.
@@ -34,20 +32,8 @@ function Ph({ label, className = '', bottom = false }: { label: string; classNam
   </div>
 }
 
-function Pill({ children }: { children: ReactNode }) {
-  return <Card className="gap-0 rounded-xl py-2.5 shadow-md"><CardContent className="px-3.5 text-xs font-medium">{children}</CardContent></Card>
-}
-
-// Переключатель вариантов для обсуждения: на сайте останется один выбранный вариант.
-function Variants({ value, onChange, options }: { value: number; onChange: (v: number) => void; options: string[] }) {
-  return <div className="mb-8 flex flex-wrap items-center gap-2 rounded-xl bg-neutral-900 p-2 text-xs text-neutral-300">
-    <span className="px-2">Вариант для обсуждения:</span>
-    {options.map((o, i) => <button key={o} type="button" onClick={() => onChange(i)} aria-pressed={value === i} className={`rounded-lg px-3 py-1.5 ${value === i ? 'bg-white text-neutral-900' : 'hover:bg-neutral-800'}`}>{String.fromCharCode(1040 + i)}. {o}</button>)}
-  </div>
-}
-
 function Block({ id, n, name, bg, children }: { id: string; n: string; name: string; bg: string; children: ReactNode }) {
-  return <section id={id} className="overflow-x-clip border-b border-neutral-200 py-14 md:py-20">
+  return <section id={id} className="overflow-x-clip py-14 md:py-20">
     <div className={container}>
       <div className="wf-svc mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs uppercase tracking-widest text-neutral-500">
         <span className="font-semibold text-neutral-900">{n} · {name}</span>
@@ -151,112 +137,109 @@ function HowItWorks() {
   </>
 }
 
-// Блок 4, вариант А: одно событие проходит по орбите от репетитора к ученику и родителю.
-function OneEvent() {
-  const [step, setStep] = useState(0)
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const t = window.setInterval(() => setStep(s => (s + 1) % 3), 2200)
-    return () => window.clearInterval(t)
-  }, [])
-  const screens = [
-    { who: 'Репетитор', device: 'Ноутбук', event: 'Отмечает работу «Квадратные уравнения» проверенной', pill: 'Оценка 5 · «Все основные шаги верны»' },
-    { who: 'Ученик', device: 'Телефон', event: 'Сразу видит оценку и комментарий', pill: '+ звёзды: 18 из 30 до награды' },
-    { who: 'Родитель', device: 'Телефон', event: 'Видит результат и следующее занятие', pill: 'Последняя работа · оценка 5' },
-  ]
-  return <div>
-    <h2 className="wf-display max-w-4xl text-[clamp(40px,5.5vw,72px)]">Одна проверка — <em>три измерения</em></h2>
-    <p className="mt-5 max-w-xl text-neutral-600">Репетитор работает в Метрике, а ученик и родитель видят результат у себя — без пересылки скриншотов и сообщений.</p>
-    <div className="relative mt-12">
-      <svg className="pointer-events-none absolute inset-x-0 top-[38%] hidden h-24 w-full md:block" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M60 80 C 300 -10, 700 -10, 940 80" fill="none" stroke="#bdbdbd" strokeWidth="2" strokeDasharray="6 6" vectorEffect="non-scaling-stroke" />
-      </svg>
-      <ol className="relative grid gap-8 md:grid-cols-3">
-        {screens.map((s, i) => <li key={s.who} className={`transition-opacity ${i === step ? 'opacity-100' : 'md:opacity-45'}`}>
-          <div className="relative">
-            <Ph label={`${s.device} ${s.who.toLowerCase()}а: экран из демо`} className={s.device === 'Ноутбук' ? 'aspect-[4/3]' : 'mx-auto aspect-[3/4] w-3/4'} />
-            <div className={`absolute -bottom-3 left-1/2 w-max max-w-[95%] -translate-x-1/2 transition-transform ${i === step ? 'scale-105' : ''}`}><Pill>{s.pill}</Pill></div>
-          </div>
-          <p className="mt-8 text-xs uppercase tracking-widest text-neutral-500">0{i + 1} · {s.who}</p>
-          <p className="mt-1 font-medium">{s.event}</p>
-        </li>)}
-      </ol>
+// Блок 4: мини-интерактивы в духе bencho.dev — посетитель трогает рабочие моменты репетитора.
+// Все данные — демонстрационные, из существующего демо.
+function Tile({ name, hint, className = '', children }: { name: string; hint: string; className?: string; children: ReactNode }) {
+  return <figure className={`group flex min-h-72 flex-col rounded-3xl bg-neutral-100 p-5 transition-colors hover:bg-neutral-200/70 ${className}`}>
+    <div className="flex flex-1 items-center justify-center py-4">{children}</div>
+    <figcaption className="flex items-baseline justify-between gap-3 text-sm"><span className="font-semibold">{name}</span><span className="text-xs text-neutral-500">{hint}</span></figcaption>
+  </figure>
+}
+
+function SlideToCheck() {
+  const [x, setX] = useState(0)
+  const [done, setDone] = useState(false)
+  const track = useRef<HTMLDivElement>(null)
+  const drag = useRef<{ start: number; max: number } | null>(null)
+  function down(e: ReactPointerEvent) {
+    if (done || !track.current) return
+    e.currentTarget.setPointerCapture(e.pointerId)
+    drag.current = { start: e.clientX - x, max: track.current.offsetWidth - 52 }
+  }
+  function move(e: ReactPointerEvent) {
+    if (!drag.current) return
+    setX(Math.min(Math.max(e.clientX - drag.current.start, 0), drag.current.max))
+  }
+  function up() {
+    if (!drag.current) return
+    if (x > drag.current.max * 0.85) { setX(drag.current.max); setDone(true) } else setX(0)
+    drag.current = null
+  }
+  return <div className="w-full max-w-md rounded-2xl bg-white p-4 shadow-sm">
+    <p className="text-xs text-neutral-500">Математика · Артём Соловьёв · 7 класс</p>
+    <p className="mt-1 font-semibold">Квадратные уравнения</p>
+    <p className="text-xs text-neutral-500">Решение_Артем.pdf · отправлено сегодня в 11:40</p>
+    <div ref={track} className={`relative mt-4 h-12 overflow-hidden rounded-full ${done ? 'bg-neutral-900 text-white' : 'bg-neutral-100'}`}>
+      <span className={`absolute inset-0 flex items-center justify-center text-sm ${done ? 'px-4' : 'pl-14 pr-4'}`}>{done ? 'Проверено — ученик увидит оценку' : 'Отметить проверенным →'}</span>
+      {!done && <button type="button" aria-label="Отметить проверенным" onPointerDown={down} onPointerMove={move} onPointerUp={up} onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setDone(true) }} className="absolute left-0.5 top-0.5 flex size-11 touch-none items-center justify-center rounded-full bg-neutral-900 text-white transition-transform" style={{ transform: `translateX(${x}px)` }}><Check className="size-5" /></button>}
     </div>
-    <div className="mt-6"><Status ok>всё есть в демо</Status></div>
+    {done && <button type="button" className="mt-3 text-xs text-neutral-500 underline" onClick={() => { setDone(false); setX(0) }}>Вернуть на проверку</button>}
   </div>
 }
 
-// Блок 4, вариант Б: тетрадь, которую посетитель «проверяет» сам.
-function CheckDemo() {
-  const [checked, setChecked] = useState(false)
-  const lines = [['2x + 3 = 11', 'верно'], ['2x = 8', 'верно'], ['x = 4', 'верно'], ['(x − 1)² = 9', 'верно'], ['x − 1 = 3', 'проверьте шаг: есть второй корень']]
-  return <div className="grid items-center gap-10 lg:grid-cols-2">
-    <div>
-      <h2 className="wf-display text-[clamp(40px,5.5vw,72px)]">Новое <em>измерение</em> без рутинных проверок</h2>
-      <p className="mt-5 max-w-md text-neutral-600">Нажмите «Проверить» и посмотрите, как выглядит разбор работы.</p>
-      <div className="mt-4"><Status>что делает ИИ — уточнить; в демо его нет</Status></div>
-      <p className="mt-8 border-l-4 border-neutral-900 pl-4 text-lg font-medium">Оценку ставит репетитор.<span className="ml-2 align-middle"><Status>подтвердить</Status></span></p>
+function StarCounter() {
+  const [stars, setStars] = useState(18)
+  const goal = 30
+  return <div className="w-full max-w-56 text-center">
+    <div className="flex items-end justify-center gap-1 tabular-nums">
+      <span key={stars} className="wf-roll wf-display text-7xl">{stars}</span>
+      <span className="wf-display pb-2 text-2xl text-neutral-400">/ {goal}</span>
     </div>
-    <div className="relative">
-      <Ph label="Фон: ИИ-звезда над стопкой тетрадей (сюжет Figma 1351:185)" className="absolute inset-0" bottom />
-      <Card className="relative mx-6 my-10 gap-4 py-6 shadow-xl sm:mx-12">
-        <CardContent className="space-y-3 px-5 font-mono text-sm">
-          {lines.map(([l, mark]) => <p key={l} className="flex min-h-7 items-center justify-between gap-3">
-            <span>{l}</span>
-            {checked && <Badge variant={mark === 'верно' ? 'secondary' : 'outline'} className={mark === 'верно' ? '' : 'border-dashed whitespace-normal text-left'}>{mark === 'верно' && <Check />}{mark}</Badge>}
-          </p>)}
-          <div className="flex items-center justify-between gap-3 border-t pt-4 font-sans">
-            {checked ? <p className="text-sm font-medium">Репетитор: оценка 4 · «Найди второй корень»</p> : <p className="text-sm text-neutral-500">Работа ждёт проверки</p>}
-            <Button size="sm" variant={checked ? 'outline' : 'default'} onClick={() => setChecked(!checked)}>{checked ? 'Сбросить' : 'Проверить'}</Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    <p className="mt-1 text-xs text-neutral-500">звёзд до награды</p>
+    <div className="mt-4 h-2 rounded-full bg-white"><div className="h-2 rounded-full bg-neutral-900 transition-all duration-500" style={{ width: `${(stars / goal) * 100}%` }} /></div>
+    <Button size="sm" variant="outline" className="mt-4 bg-white" onClick={() => setStars(s => (s >= goal ? 18 : s + 1))}>{stars >= goal ? 'Начать заново' : '+ звезда'}</Button>
   </div>
 }
 
-// Блок 5, вариант А: шаги стоят на орбите, кнопка в центре.
-function OrbitPath() {
-  const steps = [['Заявка', 'Кнопка «Оставить заявку» откроет бота Метрики в Telegram.', true], ['Знакомство', 'Команда расскажет о платформе и условиях доступа.', false], ['Начало работы', 'Как подключаются репетитор и его ученики — уточнить.', false]] as const
-  return <div>
-    <h2 className="wf-display text-center text-[clamp(40px,5.5vw,72px)]">Первый шаг <em>в новое измерение</em></h2>
-    <div className="relative mx-auto mt-10 max-w-5xl md:aspect-[2.3/1]">
-      <div className="wf-orbit absolute inset-[6%] hidden -rotate-6 md:block" aria-hidden="true" />
-      <div className="relative flex flex-col items-center justify-center gap-3 py-6 md:absolute md:inset-0">
-        <Button asChild size="lg" className="h-14 px-8 text-base"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
-        <a className="text-sm underline underline-offset-4" href="mailto:metrica_start@mail.ru">или напишите на почту</a>
+function WeekStrip() {
+  const days = [['ПН', 28, []], ['ВТ', 29, ['16:00 · Арина', '18:00 · Артём']], ['СР', 30, ['15:00 · Артём']], ['ЧТ', 1, ['17:30 · Александр']], ['ПТ', 2, ['16:00 · Елизавета']], ['СБ', 3, []], ['ВС', 4, []]] as const
+  const [day, setDay] = useState(2)
+  return <div className="w-full max-w-sm">
+    <div className="grid grid-cols-7 gap-1">
+      {days.map(([d, n, l], i) => <button key={d} type="button" onClick={() => setDay(i)} aria-pressed={day === i} className={`flex flex-col items-center rounded-xl py-2 text-xs transition-colors ${day === i ? 'bg-neutral-900 text-white' : 'bg-white hover:bg-neutral-50'}`}>
+        <span className="opacity-70">{d}</span><span className="text-base font-semibold">{n}</span><span className={`mt-1 size-1.5 rounded-full ${l.length ? (day === i ? 'bg-white' : 'bg-neutral-900') : 'bg-transparent'}`} />
+      </button>)}
+    </div>
+    <ul className="mt-3 min-h-16 space-y-1.5">
+      {days[day][2].length ? days[day][2].map(l => <li key={l} className="wf-pop rounded-xl bg-white px-3 py-2 text-sm">{l}</li>) : <li className="px-3 py-2 text-sm text-neutral-500">Занятий нет</li>}
+    </ul>
+  </div>
+}
+
+function StudentFilter() {
+  const students = [['Артём Соловьёв', 'Математика · 7 класс', 'Нужно проверить ДЗ'], ['Арина Мошкова', 'Математика · 6 класс', 'Занятие завтра'], ['Александр Смуров', 'Физика · 9 класс', 'Все задания проверены'], ['Елизавета Терехова', 'Математика · 8 класс', 'Ожидаем ответ']]
+  const filters = ['Все', 'Нужно проверить ДЗ', 'Занятие завтра']
+  const [f, setF] = useState(0)
+  const list = f === 0 ? students : students.filter(s => s[2] === filters[f])
+  return <div className="w-full max-w-sm">
+    <div className="flex flex-wrap gap-1.5">{filters.map((t, i) => <button key={t} type="button" onClick={() => setF(i)} aria-pressed={f === i} className={`rounded-full px-3 py-1 text-xs transition-colors ${f === i ? 'bg-neutral-900 text-white' : 'bg-white hover:bg-neutral-50'}`}>{t}</button>)}</div>
+    <ul className="mt-3 space-y-1.5">{list.map(([n, s, st]) => <li key={n} className="wf-pop flex items-center justify-between gap-2 rounded-xl bg-white px-3 py-2"><span className="min-w-0"><span className="block truncate text-sm font-medium">{n}</span><span className="block text-xs text-neutral-500">{s}</span></span><Badge variant="secondary" className="shrink-0">{st}</Badge></li>)}</ul>
+  </div>
+}
+
+function ParentCards() {
+  const cards = [['Последняя работа', 'Квадратные уравнения · оценка 5', '«Хорошая работа! Все основные шаги верны.»'], ['Учёба в ритме', '12 занятий проведено', 'Следующее — завтра в 16:00'], ['Ближайшие занятия', 'Математика · завтра, 16:00', 'Артём Соловьёв · 7 класс']]
+  const [top, setTop] = useState(0)
+  return <button type="button" onClick={() => setTop(t => (t + 1) % cards.length)} className="relative h-40 w-full max-w-xs" aria-label="Показать следующую карточку">
+    {cards.map((c, i) => {
+      const pos = (i - top + cards.length) % cards.length
+      return <div key={c[0]} className="absolute inset-x-0 top-0 rounded-2xl bg-white p-4 text-left shadow-md transition-all duration-500" style={{ transform: `translateY(${pos * 14}px) scale(${1 - pos * 0.05})`, zIndex: cards.length - pos, opacity: pos > 1 ? 0.5 : 1 }}>
+        <p className="text-xs text-neutral-500">{c[0]}</p><p className="mt-1 font-semibold">{c[1]}</p><p className="mt-1 text-sm text-neutral-600">{c[2]}</p>
       </div>
-      <ol className="mt-6 grid gap-6 md:mt-0">
-        {steps.map(([t, d, ok], i) => <li key={t} className={`flex items-start gap-4 md:absolute md:w-64 ${['md:left-[2%] md:top-[2%]', 'md:right-[0%] md:top-[30%]', 'md:bottom-[0%] md:left-[18%]'][i]}`}>
-          <Ph label="3D" className="size-16 shrink-0 rounded-full" />
-          <div><p className="text-xs uppercase tracking-widest text-neutral-500">Шаг {i + 1}</p><p className="font-semibold">{t}</p><p className="mt-1 text-sm text-neutral-600">{d}</p><div className="mt-2"><Status ok={ok}>{ok ? 'согласовано' : 'уточнить процесс'}</Status></div></div>
-        </li>)}
-      </ol>
-    </div>
-  </div>
+    })}
+  </button>
 }
 
-// Блок 5, вариант Б: показываем, куда ведёт кнопка, — экран бота в Telegram.
-function BotPreview() {
-  return <div className="grid items-center gap-10 md:grid-cols-2">
-    <div>
-      <h2 className="wf-display text-[clamp(40px,5.5vw,72px)]">Заявка — <em>в одно касание</em></h2>
-      <p className="mt-5 max-w-md text-neutral-600">Без форм на сайте: кнопка открывает бота Метрики в Telegram, дальше команда свяжется с вами там.</p>
-      <ol className="mt-6 space-y-2 text-sm">
-        <li className="flex gap-2"><span className="font-semibold">1.</span>Нажмите «Оставить заявку»</li>
-        <li className="flex gap-2"><span className="font-semibold">2.</span>Нажмите «Запустить» в Telegram</li>
-        <li className="flex gap-2"><span className="font-semibold">3.</span>Ответьте на вопросы бота<span className="ml-1"><Status>какие — уточнить</Status></span></li>
-      </ol>
-      <Button asChild size="lg" className="mt-7"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
-    </div>
-    <div className="mx-auto w-full max-w-sm rounded-[2.5rem] border-[10px] border-neutral-900 bg-neutral-100 p-4">
-      <div className="flex items-center gap-3 border-b border-neutral-300 pb-3"><Ph label="М" className="size-10 rounded-full" /><div><p className="text-sm font-semibold">МЕТРИКА_БОТ</p><p className="text-xs text-neutral-500">бот</p></div></div>
-      <div className="space-y-3 py-6">
-        <div className="w-4/5 rounded-2xl rounded-tl-sm bg-white p-3"><div className="h-2 w-full rounded bg-neutral-300" /><div className="mt-2 h-2 w-3/4 rounded bg-neutral-300" /><p className="mt-2 text-[11px] text-neutral-500">Приветствие бота — текст уточнить</p></div>
-        <div className="ml-auto w-3/5 rounded-2xl rounded-tr-sm bg-neutral-800 p-3"><div className="h-2 w-full rounded bg-neutral-500" /></div>
-        <div className="w-4/5 rounded-2xl rounded-tl-sm bg-white p-3"><div className="h-2 w-full rounded bg-neutral-300" /><div className="mt-2 h-2 w-2/3 rounded bg-neutral-300" /></div>
-      </div>
-      <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-neutral-400">Запустить <Send className="ml-auto size-4" /></div>
+function Playground() {
+  return <div>
+    <h2 className="wf-display max-w-3xl text-[clamp(40px,5.5vw,72px)]">Попробуйте <em>прямо здесь</em></h2>
+    <p className="mt-5 max-w-xl text-neutral-600">Несколько моментов из рабочего дня репетитора в Метрике. Нажимайте, листайте, перетаскивайте. Данные — из демо.</p>
+    <div className="mt-10 grid gap-3 md:grid-cols-3">
+      <Tile name="Проверка ДЗ" hint="Перетащите кнопку" className="md:col-span-2"><SlideToCheck /></Tile>
+      <Tile name="Звёзды ученика" hint="Нажмите «+ звезда»"><StarCounter /></Tile>
+      <Tile name="Расписание" hint="Выберите день"><WeekStrip /></Tile>
+      <Tile name="Ученики" hint="Отфильтруйте"><StudentFilter /></Tile>
+      <Tile name="Что видит родитель" hint="Нажмите на карточку"><ParentCards /></Tile>
     </div>
   </div>
 }
@@ -264,8 +247,6 @@ function BotPreview() {
 export default function Wireframe() {
   const [notes, setNotes] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [v4, setV4] = useState(0)
-  const [v5, setV5] = useState(0)
 
   return <div className={notes ? '' : 'wf-notes-off'}>
     {/* Служебная панель согласования */}
@@ -280,7 +261,7 @@ export default function Wireframe() {
       <div className={`${container} flex h-16 items-center justify-between gap-4`}>
         <a href="#" className="rounded-md border-2 border-neutral-900 px-2.5 py-1 text-sm font-black italic tracking-tight">[ЛОГО] МЕТРИКА</a>
         <nav className="hidden gap-6 text-sm md:flex" aria-label="Основная навигация">
-          <a href="#audiences">Для кого</a><a href="#how">Как это работает</a><a href="#start">Как начать</a><a href="#faq">Вопросы</a>
+          <a href="#audiences">Для кого</a><a href="#how">Как это работает</a><a href="#try">Попробовать</a><a href="#faq">Вопросы</a>
         </nav>
         <div className="flex items-center gap-1">
           <Button asChild size="sm" className="hidden sm:inline-flex"><a href={telegram} target="_blank" rel="noopener noreferrer">Оставить заявку <ArrowUpRight /></a></Button>
@@ -288,7 +269,7 @@ export default function Wireframe() {
         </div>
       </div>
       {menuOpen && <nav className={`${container} flex flex-col gap-4 pb-5 text-sm md:hidden`} aria-label="Мобильная навигация">
-        {[['audiences', 'Для кого'], ['how', 'Как это работает'], ['start', 'Как начать'], ['faq', 'Вопросы']].map(([id, t]) => <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>{t}</a>)}
+        {[['audiences', 'Для кого'], ['how', 'Как это работает'], ['try', 'Попробовать'], ['faq', 'Вопросы']].map(([id, t]) => <a key={id} href={`#${id}`} onClick={() => setMenuOpen(false)}>{t}</a>)}
       </nav>}
     </header>
 
@@ -344,35 +325,23 @@ export default function Wireframe() {
         <div className="mt-6"><Note><b>Референс 3 (tokens.studio):</b> при прокрутке экран справа закреплён, пункты слева по очереди раскрываются, полоска показывает прогресс. Экран вставлен в нашу букву М. Пункт можно нажать.</Note></div>
       </Block>
 
-      <Block id="connect" n="04" name="Связь / проверка" bg="тёмно-синий (А) или синий (Б)">
-        <Variants value={v4} onChange={setV4} options={['Одна проверка — три экрана', 'Проверь сам']} />
-        {v4 === 0 ? <OneEvent /> : <CheckDemo />}
-        <div className="mt-8"><Note>{v4 === 0
-          ? <><b>А.</b> Событие «бежит» по орбите от ноутбука репетитора к телефонам ученика и родителя — «новое измерение» как связь между людьми. Все данные — из демо. Референсы: ось с объектами у Яндекс Учебника, пунктир ClassDojo.</>
-          : <><b>Б.</b> Интерактив: посетитель сам нажимает «Проверить» и видит метки на строках решения. Референсы: Speak, Studdy. Подходит, только если команда подтвердит, что делает ИИ.</>}</Note></div>
+      <Block id="try" n="04" name="Попробуйте прямо здесь" bg="белый; плитки — светло-голубые, акценты синие и мятные">
+        <Playground />
+        <div className="mt-8"><Note><b>bencho.dev:</b> спокойная сетка плиток, в каждой — живое мини-действие. Блок 3 рассказывает, что умеет Метрика, а здесь посетитель сам это трогает. Все данные — из демо.</Note></div>
       </Block>
 
-      <Block id="start" n="05" name="Начало работы" bg="белый (А) или фиолетовый (Б)">
-        <Variants value={v5} onChange={setV5} options={['Шаги на орбите', 'Экран бота']} />
-        {v5 === 0 ? <OrbitPath /> : <BotPreview />}
-        <div className="mt-8"><Note>{v5 === 0
-          ? <><b>А.</b> Шаги стоят на большой орбите, кнопка — в центре. Вместо значков — 3D-объекты из концепции. На телефоне шаги идут списком.</>
-          : <><b>Б.</b> Показываем, куда ведёт кнопка: телефон с ботом Метрики. Снимает вопрос «что будет после нажатия». Тексты бота нужно взять у команды.</>}</Note></div>
-      </Block>
-
-      <Block id="faq" n="06" name="Вопросы" bg="белый">
-        <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <h2 className="wf-display text-[clamp(40px,5.5vw,72px)]">Остались <em>вопросы?</em></h2>
-            <p className="mt-5 text-sm text-neutral-600">Напишите команде: <a className="underline" href="mailto:metrica_start@mail.ru">metrica_start@mail.ru</a></p>
-          </div>
-          <Accordion type="single" collapsible className="border-t">
+      <Block id="faq" n="05" name="Вопросы" bg="белый">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="wf-display text-center text-[clamp(36px,4.5vw,56px)]">Вопросы</h2>
+          <Accordion type="single" collapsible className="mt-10">
             {faq.map((f, i) => <AccordionItem key={f.q} value={`q${i}`}>
-              <AccordionTrigger className="text-base">{f.q}</AccordionTrigger>
-              <AccordionContent className="space-y-2 text-neutral-600"><p>{f.a}</p>{!f.ok && <Status>ответ уточнить</Status>}</AccordionContent>
+              <AccordionTrigger className="py-5 text-base font-medium hover:no-underline">{f.q}</AccordionTrigger>
+              <AccordionContent className="space-y-2 pb-5 text-neutral-600"><p>{f.a}</p>{!f.ok && <Status>ответ уточнить</Status>}</AccordionContent>
             </AccordionItem>)}
           </Accordion>
+          <p className="mt-8 text-center text-sm text-neutral-600">Не нашли ответ? <a className="underline underline-offset-4" href={telegram} target="_blank" rel="noopener noreferrer">Напишите нам в Telegram</a> или на metrica_start@mail.ru</p>
         </div>
+        <div className="mt-8"><Note><b>bencho.dev:</b> узкая колонка по центру, тонкие строки, без большого заголовка сбоку.</Note></div>
       </Block>
 
       <Block id="final" n="07" name="Финальная заявка" bg="синий, как баннер; объекты собираются на орбите">
@@ -390,11 +359,13 @@ export default function Wireframe() {
       </Block>
     </main>
 
-    <footer className="pb-24 pt-10 md:pb-10">
-      <div className={`${container} flex flex-col gap-3 text-sm text-neutral-600 sm:flex-row sm:items-center sm:justify-between`}>
-        <span className="font-black italic text-neutral-900">[ЛОГО] МЕТРИКА</span>
-        <a href="mailto:metrica_start@mail.ru">metrica_start@mail.ru</a>
-        <a href="https://outputs-livid-delta.vercel.app/legal/#privacy" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a>
+    <footer className="pb-24 pt-12 md:pb-14 md:pt-16">
+      <div className={`${container} grid grid-cols-2 gap-x-6 gap-y-7 text-sm sm:grid-cols-[1fr_auto_auto_auto_1fr] sm:gap-14`}>
+        <span className="wf-m wf-m-dark col-span-2 h-6 w-11 sm:col-span-1" aria-label="Метрика" role="img" />
+        <nav aria-label="Разделы" className="flex flex-col gap-2"><span className="font-medium">Разделы</span>{[['audiences', 'Для кого'], ['how', 'Как это работает'], ['try', 'Попробовать'], ['faq', 'Вопросы']].map(([id, t]) => <a key={id} className="text-neutral-500 hover:text-neutral-900" href={`#${id}`}>{t}</a>)}</nav>
+        <div className="flex flex-col gap-2"><span className="font-medium">Связь</span><a className="text-neutral-500 hover:text-neutral-900" href={telegram} target="_blank" rel="noopener noreferrer">Telegram</a><span className="select-all text-neutral-500">metrica_start@mail.ru</span></div>
+        <div className="col-span-2 flex flex-col gap-2 sm:col-span-1"><span className="font-medium">Документы</span><a className="text-neutral-500 hover:text-neutral-900" href="https://outputs-livid-delta.vercel.app/legal/#privacy" target="_blank" rel="noopener noreferrer">Политика конфиденциальности</a></div>
+        <span className="col-span-2 text-neutral-400 sm:col-span-1 sm:text-right">© 2026 Метрика</span>
       </div>
     </footer>
 
