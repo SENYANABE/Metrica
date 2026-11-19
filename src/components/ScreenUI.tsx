@@ -3,7 +3,7 @@ import { Check } from 'lucide-react'
 // Экраны интерфейса Метрики в стиле концепции. Вёрстка в em: 1em = 1/96 ширины экрана,
 // поэтому экран одинаково выглядит и в окне блока «Как это работает», и в дисплее ноутбука.
 
-export type ScreenKind = 'lessons' | 'students' | 'homework' | 'progress'
+export type ScreenKind = 'lessons' | 'students' | 'homework' | 'progress' | 'progress-tree'
 
 const tabs: [ScreenKind, string][] = [['lessons', 'Занятия'], ['students', 'Ученики'], ['homework', 'Проверка ДЗ']]
 
@@ -88,6 +88,17 @@ function Progress() {
   </>
 }
 
+function ProgressTree() {
+  return <>
+    <h4 className="sui-h">Дерево прогресса</h4>
+    <div className="sui-rows">
+      <div className="sui-card"><small>Пройдено</small><b>Линейные уравнения</b></div>
+      <div className="sui-card"><small>В работе</small><b>Квадратные уравнения</b></div>
+      <div className="sui-card"><small>На повторение</small><b>Формулы сокращённого умножения</b></div>
+    </div>
+  </>
+}
+
 export function ScreenUI({ kind }: { kind: ScreenKind }) {
   return <div className="sui" aria-hidden="true">
     <Bar active={kind} />
@@ -96,6 +107,7 @@ export function ScreenUI({ kind }: { kind: ScreenKind }) {
       {kind === 'students' && <Students />}
       {kind === 'homework' && <Homework />}
       {kind === 'progress' && <Progress />}
+      {kind === 'progress-tree' && <ProgressTree />}
     </div>
   </div>
 }

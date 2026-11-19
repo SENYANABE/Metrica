@@ -37,18 +37,23 @@ function usePrefersReducedMotion() {
 /* ——— Для кого: три карточки ложатся стопкой при прокрутке ——— */
 
 const audiences = [
-  { id: 'tutor', tone: 'card-blue', art: laptopArt, screen: <ScreenUI kind="lessons" />, title: <>Новое <em>измерение</em> для занятий</>, text: 'Репетитору — расписание, ученики, материалы и домашние задания в одной платформе.', cta: true },
-  { id: 'student', tone: 'card-violet', art: studentArt, title: <>Ваши уроки <em>в новом</em> месте</>, text: 'Ученику — ближайшее занятие, материалы, домашнее задание и звёзды за прогресс в личном кабинете.' },
-  { id: 'parent', tone: 'card-navy', art: parentArt, title: <>Больше <em>знаний</em> для ваших детей</>, text: 'Родителю — проведённые и ближайшие занятия, оценки и комментарии репетитора. Проще заботиться об образовании ребёнка.' },
+  { id: 'tutor', tag: 'Для репетитора', tone: 'card-blue', art: laptopArt, screen: <ScreenUI kind="lessons" />, title: <>Новое <em>измерение</em> для занятий</>, items: ['Расписание и учебные материалы', 'ИИ-помощник для подготовки и проверки ДЗ', 'Карточка ученика с прогрессом', 'Чат с родителями'], cta: true },
+  { id: 'student', tag: 'Для ученика', tone: 'card-violet', art: studentArt, title: <>Ваши уроки <em>в новом</em> месте</>, items: ['Расписание и материалы к урокам', 'Домашние задания с оценками и комментариями', 'Звёзды за успехи и награды'] },
+  { id: 'parent', tag: 'Для родителя', tone: 'card-navy', art: parentArt, title: <>Больше <em>знаний</em> для ваших детей</>, items: ['Расписание и история занятий', 'Оценки и комментарии репетитора', 'Чат с репетитором'] },
 ]
+
+function BenefitList({ items }: { items: string[] }) {
+  return <ul className="benefit-list" role="list">{items.map(item => <li key={item}>{item}</li>)}</ul>
+}
 
 function Audiences() {
   return <section id="audiences" className="audiences" aria-label="Для кого Метрика">
     <div className="container stack">
       {audiences.map((a, i) => <article key={a.id} className={`aud-card ${a.tone}`} style={{ '--i': i } as CSSProperties}>
         <div className="aud-copy">
+          <span className="aud-tag">{a.tag}</span>
           <h2>{a.title}</h2>
-          <p>{a.text}</p>
+          <BenefitList items={a.items} />
           {a.cta && <ApplyButton />}
         </div>
         <BannerArt art={a.art} screen={a.screen} className="aud-art" />
@@ -59,12 +64,13 @@ function Audiences() {
 
 /* ——— Как это работает: экран закреплён, пункты раскрываются по прокрутке ——— */
 
-const features: { title: string; text: string; screen: ScreenKind | null }[] = [
-  { title: 'Расписание и занятия', text: 'Всё важное перед глазами: расписание занятий, учебные материалы и домашние задания учеников.', screen: 'lessons' },
-  { title: 'Ученики', text: 'Все ученики с предметом, классом и статусом: нужно проверить ДЗ, занятие завтра, ожидаем ответ.', screen: 'students' },
-  { title: 'Проверка ДЗ', text: 'Работы, которые ждут проверки. После проверки ученик видит оценку и комментарий, прогресс обновляется.', screen: 'homework' },
-  { title: 'ИИ-помощник', text: 'Помогает репетитору с проверкой домашних заданий, чтобы больше времени оставалось на учеников.', screen: null },
-  { title: 'Прогресс и награды', text: 'Ученик видит прогресс и звёзды до награды, родитель — оценки и комментарии репетитора.', screen: 'progress' },
+const features: { title: string; items: string[]; screen: ScreenKind | null }[] = [
+  { title: 'Всё самое важное перед глазами', items: ['Расписание занятий', 'Ближайший урок', 'Учебные материалы', 'Домашние задания учеников'], screen: 'lessons' },
+  { title: 'Ученики', items: ['Карточки с предметом и классом', 'Статусы домашних работ', 'Ближайшие занятия'], screen: 'students' },
+  { title: 'Проверка ДЗ', items: ['Работы, которые ждут проверки', 'Оценки и комментарии к решению', 'Результаты в кабинете ученика'], screen: 'homework' },
+  { title: 'ИИ-помощник', items: ['Подготовка домашних заданий', 'Проверка работ с помощью ИИ'], screen: null },
+  { title: 'Геймификация', items: ['Звёзды за успехи', 'Цели и награды', 'Сколько звёзд осталось до награды'], screen: 'progress' },
+  { title: 'Дерево прогресса', items: ['Пройденные темы', 'Оценки и комментарии к работам', 'Темы, которые стоит повторить'], screen: 'progress-tree' },
 ]
 
 // Сцена: одна неподвижная основа (волна-«М» и орбиты), меняется только то, что на ней.
@@ -106,7 +112,7 @@ function HowItWorks() {
   return <section id="how" className="how">
     <div className="container">
       <h2 className="section-title">Как это <em>работает</em></h2>
-      <p className="section-lead">Всё, что нужно для занятий, — в одном рабочем пространстве.</p>
+      <p className="section-lead">Всё, что нужно для занятий, — в одном измерении.</p>
     </div>
     <div ref={ref} className="how-scroll" style={{ height: `${features.length * 70 + 40}vh` }}>
       <div className="how-pin">
@@ -116,7 +122,7 @@ function HowItWorks() {
               {i === active
                 ? <div className="how-item is-active" aria-current="step">
                   <h3>{f.title}</h3>
-                  <p>{f.text}</p>
+                  <BenefitList items={f.items} />
                   <span className="how-bar"><span style={{ width: `${Math.max(progress, 0.04) * 100}%` }} /></span>
                 </div>
                 : <button type="button" className="how-item" onClick={() => jump(i)}><h3>{f.title}</h3></button>}
@@ -133,7 +139,7 @@ function HowItWorks() {
           {f.screen && <div className="stage-window is-active"><ScreenUI kind={f.screen} /></div>}
         </div>
         <h3>{f.title}</h3>
-        <p>{f.text}</p>
+        <BenefitList items={f.items} />
       </li>)}
     </ol>
   </section>
@@ -223,11 +229,11 @@ function ParentCards({ onUse }: { onUse: () => void }) {
 }
 
 const dims = [
-  { dim: 'Без рутинных проверок', name: 'Проверка домашних заданий', hint: 'Перетащите кнопку вправо', W: SlideToCheck, wide: true },
+  { dim: 'Проверка работ с помощью ИИ', name: 'Проверка домашних заданий', hint: 'Перетащите кнопку вправо', W: SlideToCheck, wide: true },
   { dim: 'Измерение роста', name: 'Звёзды за прогресс ученика', hint: 'Нажмите «+ звезда»', W: StarCounter },
-  { dim: 'Измерение времени', name: 'Расписание недели', hint: 'Выберите день', W: WeekStrip },
+  { dim: 'Измерение времени', name: 'Неделя занятий', hint: 'Выберите день', W: WeekStrip },
   { dim: 'Измерение учеников', name: 'Ученики и статусы домашних работ', hint: 'Отфильтруйте список', W: StudentFilter },
-  { dim: 'Измерение семьи', name: 'Что видит родитель', hint: 'Нажмите на карточку', W: ParentCards },
+  { dim: 'Измерение родителя', name: 'Что видит родитель', hint: 'Нажмите на карточку', W: ParentCards },
 ]
 
 function Dimensions() {
@@ -330,9 +336,10 @@ export default function App() {
     <main id="main">
       <section className="hero">
         <div className="container hero-copy">
-          <h1>Новое <em>измерение</em> обучения</h1>
-          <p className="hero-lead">Метрика — платформа для репетиторов. Расписание, материалы и домашние задания — в одном месте.</p>
-          <div className="button-row"><ApplyButton /><a className="text-link" href="#how">Как это работает</a></div>
+          <h1><span className="hero-number">I</span> Новое <em>измерение</em> обучения</h1>
+          <p className="hero-lead">Метрика — платформа для репетиторов</p>
+          <p className="hero-detail">Расписание, материалы и домашние задания — в одном месте.</p>
+          <div className="button-row"><ApplyButton /></div>
         </div>
         <BannerArt art={heroArt} className="hero-art" />
       </section>
