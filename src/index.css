@@ -118,12 +118,15 @@ p, li, figcaption span, .faq-list [data-slot="accordion-content"] { text-wrap: p
 /* Для кого: карточки ложатся стопкой (референс tokens.studio) */
 .audiences { padding-block: clamp(56px, 7vw, 112px) 24px; }
 .stack { display: grid; gap: 32px; }
-.aud-card { --i: 0; position: sticky; top: calc(var(--header-h) + 20px + var(--i) * 28px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; min-height: min(640px, calc(100vh - var(--header-h) - 120px)); border-radius: 36px; overflow: hidden; color: #fff; box-shadow: 0 -18px 40px -24px #09120d66; }
+.aud-card { --i: 0; position: sticky; top: min(var(--stack-offset), calc(100svh - var(--card-height, 0px) - 16px)); --stack-offset: calc(var(--header-h) + 20px + var(--i) * 28px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; min-height: min(640px, calc(100vh - var(--header-h) - 120px)); border-radius: 36px; overflow: hidden; color: #fff; box-shadow: 0 -18px 40px -24px #09120d66; }
 .card-blue { background: var(--blue); }
 .card-violet { background: var(--violet); }
 .card-navy { background: var(--navy); }
 .aud-copy { position: relative; z-index: 2; padding: clamp(32px, 4.4vw, 72px); }
-.aud-copy h2 { font-size: clamp(44px, 5.6vw, 80px); max-width: 8em; }
+.aud-copy { container-type: inline-size; }
+.aud-copy h2 { font-size: clamp(22px, 10.4cqi, 72px); }
+.aud-copy h2 > em, .aud-copy h2 > span { display: block; }
+.aud-copy h2 > span { white-space: nowrap; }
 .aud-tag { display: inline-block; margin-bottom: 16px; padding: 6px 12px; border-radius: 999px; background: var(--mint); color: var(--ink); font-size: 13px; font-weight: 700; }
 .benefit-list { display: grid; gap: 7px; margin: 16px 0 0; padding: 0; list-style: none; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.4; }
 .benefit-list li { display: grid; grid-template-columns: 7px minmax(0, 1fr); align-items: baseline; gap: 10px; }
@@ -370,9 +373,8 @@ button.how-item:hover h3 { color: var(--blue); }
   .art.hero-art { position: relative; top: auto; left: -14.5vw; width: 120vw; margin-top: 8px; }
   .button-row { gap: 20px; }
   .stack { gap: 20px; }
-  .aud-card { top: calc(var(--header-h) + 12px + var(--i) * 16px); border-radius: 28px; }
+  .aud-card { --stack-offset: calc(var(--header-h) + 12px + var(--i) * 16px); border-radius: 28px; }
   .aud-copy { padding: 28px 24px 8px; }
-  .aud-copy h2 { font-size: calc((100vw - 80px) / 5.6); }
   .aud-art { width: 112%; margin-left: -6%; }
   .dims-grid { grid-template-columns: 1fr; }
   .dim-wide { grid-column: auto; }
@@ -394,7 +396,3 @@ button.how-item:hover h3 { color: var(--blue); }
   *, *::before, *::after { transition-duration: 0s !important; }
 }
 
-/* The full audience lists must stay scrollable when a card exceeds the viewport. */
-@media (max-width: 1050px), (max-height: 900px) {
-  .aud-card { position: relative; top: auto; }
-}

@@ -37,18 +37,37 @@ function usePrefersReducedMotion() {
 /* ——— Для кого: три карточки ложатся стопкой при прокрутке ——— */
 
 const audiences = [
-  { id: 'tutor', tag: 'Для репетитора', tone: 'card-blue', art: laptopArt, screen: <ScreenUI kind="lessons" />, title: <><em>Измерение</em> для продуктивного обучения</>, items: ['ИИ помощник для проверки и генерации дз', 'Чат с родителями', 'Карточка ученика', 'Календарь занятий', 'Банк готовых заданий', 'Система хранения собственных материалов', 'Конструктор заданий', 'Уведомление об уроках и дедлайнах'], cta: true },
-  { id: 'student', tag: 'Для ученика', tone: 'card-violet', art: studentArt, title: <><em>Измерение</em> для кайфового обучения</>, items: ['Дерево прогресса', 'Календарь занятий', 'Награды за продуктивное обучение', 'Уведомление о дедлайнах', 'Доступ ко всем учебным материалам', 'Чат с репетитором'] },
-  { id: 'parent', tag: 'Для родителя', tone: 'card-navy', art: parentArt, title: <>Больше <em>знаний</em> для ваших детей</>, items: ['Расписание и история занятий', 'Оценки и комментарии репетитора', 'Чат с репетитором'] },
+  { id: 'tutor', tag: 'Для репетитора', tone: 'card-blue', art: laptopArt, screen: <ScreenUI kind="lessons" />, title: <><em>Измерение</em>{' '}<span>для&nbsp;продуктивного</span>{' '}обучения</>, items: ['ИИ помощник для проверки и генерации дз', 'Чат с родителями', 'Карточка ученика', 'Календарь занятий', 'Банк готовых заданий', 'Система хранения собственных материалов', 'Конструктор заданий', 'Уведомление об уроках и дедлайнах'], cta: true },
+  { id: 'student', tag: 'Для ученика', tone: 'card-violet', art: studentArt, title: <><em>Измерение</em>{' '}<span>для&nbsp;кайфового</span>{' '}обучения</>, items: ['Дерево прогресса', 'Календарь занятий', 'Награды за продуктивное обучение', 'Уведомление о дедлайнах', 'Доступ ко всем учебным материалам', 'Чат с репетитором'] },
+  { id: 'parent', tag: 'Для родителей', tone: 'card-navy', art: parentArt, title: <><em>Измерение</em>{' '}<span>для&nbsp;эффективного</span>{' '}обучения</>, items: ['Календарь занятий ребенка', 'Оценки и комментарии репетитора', 'Отслеживание прогресса обучения', 'Учет оплаты', 'Чат с репетитором'] },
 ]
 
+function keepShortWords(text: string) {
+  return text.replace(/(^|[\s(«])((?:а|и|в|во|с|со|к|ко|у|о|об|от|по|за|из|на|до|не|ни|но|или|для|без|под|над|при|через) +)+/giu, group => group.replaceAll(' ', '\u00a0').replace(/^\u00a0/, ' '))
+}
+
 function BenefitList({ items }: { items: string[] }) {
-  return <ul className="benefit-list" role="list">{items.map(item => <li key={item}>{item}</li>)}</ul>
+  return <ul className="benefit-list" role="list">{items.map(item => <li key={item}>{keepShortWords(item)}</li>)}</ul>
 }
 
 function Audiences() {
+  const stack = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const cards = stack.current?.querySelectorAll<HTMLElement>('.aud-card')
+    if (!cards || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(entries => {
+      for (const { target } of entries) {
+        const card = target as HTMLElement
+        card.style.setProperty('--card-height', `${card.offsetHeight}px`)
+      }
+    })
+    cards.forEach(card => observer.observe(card))
+    return () => observer.disconnect()
+  }, [])
+
   return <section id="audiences" className="audiences" aria-label="Для кого Метрика">
-    <div className="container stack">
+    <div className="container stack" ref={stack}>
       {audiences.map((a, i) => <article key={a.id} className={`aud-card ${a.tone}`} style={{ '--i': i } as CSSProperties}>
         <div className="aud-copy">
           <span className="aud-tag">{a.tag}</span>
@@ -70,7 +89,7 @@ const features: { title: string; items: string[]; screen: ScreenKind | null }[] 
   { title: 'Дерево прогресса', items: ['Ученик, репетитор и родитель могут отследить прогресс обучения', 'Наглядный путь к цели в карточке ученика'], screen: 'progress-tree' },
   { title: 'Всё самое важное перед глазами', items: ['Расписание занятий', 'Учебные материалы', 'Домашние задания учеников'], screen: 'lessons' },
   { title: 'Проверка ДЗ', items: ['Проверка выполненных работ', 'Выставление оценок', 'Комментарии и обратная связь ученику', 'Автоматическое обновление прогресса после проверки'], screen: 'homework' },
-  { title: 'Ученики', items: ['Карточки с предметом и классом', 'Статусы домашних работ', 'Ближайшие занятия'], screen: 'students' },
+  { title: 'Ученики', items: ['Предмет и класс', 'Статус домашнего задания', 'Ближайшие занятия'], screen: 'students' },
 ]
 
 // Сцена: одна неподвижная основа (волна-«М» и орбиты), меняется только то, что на ней.
@@ -122,7 +141,7 @@ function HowItWorks() {
               {i === active
                 ? <div className="how-item is-active" aria-current="step">
                   <h3>{f.title}</h3>
-                  <BenefitList items={f.items} />
+                  {f.items.length === 1 ? <p>{keepShortWords(f.items[0])}</p> : <BenefitList items={f.items} />}
                   <span className="how-bar"><span style={{ width: `${Math.max(progress, 0.04) * 100}%` }} /></span>
                 </div>
                 : <button type="button" className="how-item" onClick={() => jump(i)}><h3>{f.title}</h3></button>}
@@ -139,7 +158,7 @@ function HowItWorks() {
           {f.screen && <div className="stage-window is-active"><ScreenUI kind={f.screen} /></div>}
         </div>
         <h3>{f.title}</h3>
-        <BenefitList items={f.items} />
+        {f.items.length === 1 ? <p>{keepShortWords(f.items[0])}</p> : <BenefitList items={f.items} />}
       </li>)}
     </ol>
   </section>
@@ -335,7 +354,7 @@ export default function App() {
       <section className="hero">
         <div className="container hero-copy">
           <h1><span><em>Открой</em> новое</span>{' '}<span>измерение</span>{' '}<span>обучения</span></h1>
-          <p className="hero-lead">Метрика — платформа для репетиторов, где все инструменты для работы собраны в одном месте</p>
+          <p className="hero-lead">{keepShortWords('Метрика — платформа для репетиторов, где все инструменты для работы собраны в одном месте')}</p>
           <div className="button-row"><ApplyButton /></div>
         </div>
         <BannerArt art={heroArt} className="hero-art" />
