@@ -87,7 +87,7 @@ const features: { title: string; items: string[]; screen: ScreenKind | null }[] 
   { title: 'ИИ-помощник', items: ['Помогает репетитору создавать и проверять домашнее задание'], screen: null },
   { title: 'Геймификация', items: ['Помогает повысить мотивации ученика с помощью внутренней валюты платформы', 'Возможность адаптировать геймификацию под каждого ученика'], screen: 'progress' },
   { title: 'Дерево прогресса', items: ['Ученик, репетитор и родитель могут отследить прогресс обучения', 'Наглядный путь к цели в карточке ученика'], screen: 'progress-tree' },
-  { title: 'Всё самое важное перед глазами', items: ['Расписание занятий', 'Учебные материалы', 'Домашние задания учеников'], screen: 'lessons' },
+  { title: 'Расписание и занятия', items: ['Расписание занятий', 'Учебные материалы', 'Домашние задания учеников'], screen: 'lessons' },
   { title: 'Проверка ДЗ', items: ['Проверка выполненных работ', 'Выставление оценок', 'Комментарии и обратная связь ученику', 'Автоматическое обновление прогресса после проверки'], screen: 'homework' },
   { title: 'Ученики', items: ['Предмет и класс', 'Статус домашнего задания', 'Ближайшие занятия'], screen: 'students' },
 ]
@@ -131,7 +131,7 @@ function HowItWorks() {
   return <section id="how" className="how">
     <div className="container">
       <h2 className="section-title">Как это <em>работает</em></h2>
-      <p className="section-lead">Всё, что нужно для занятий, — в одном измерении.</p>
+      <p className="section-lead">Всё, что нужно для занятий, в одном измерении.</p>
     </div>
     <div ref={ref} className="how-scroll" style={{ height: `${features.length * 70 + 40}vh` }}>
       <div className="how-pin">
@@ -284,7 +284,7 @@ function Dimensions() {
       <div className="dims-head">
         <div>
           <h2 className="section-title">Шагните в <em>новое измерение</em></h2>
-          <p className="section-lead">Пять измерений работы репетитора — в одной Метрике. Нажимайте, перетаскивайте и листайте карточки, чтобы открыть их все.</p>
+          <p className="section-lead">Пять измерений работы репетитора на платформе «Метрика». Нажимайте, перетаскивайте и листайте карточки, чтобы открыть их все.</p>
         </div>
         <p className="dims-count" aria-live="polite">
           <span className="dims-dots" aria-hidden="true">{open.map((v, i) => <i key={i} className={v ? 'on' : ''} />)}</span>
