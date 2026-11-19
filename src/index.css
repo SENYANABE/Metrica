@@ -246,7 +246,7 @@ button.how-item:hover h3 { color: var(--blue); }
 .dim.is-open .dim-mark { border-color: var(--mint); background: var(--mint); color: var(--ink); scale: 1.08; }
 .dim-mark svg { width: 16px; height: 16px; }
 .dim-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 28px 0 20px; }
-.dim figcaption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+.dim figcaption { display: grid; justify-items: start; gap: 4px; }
 .dim figcaption b { font-size: clamp(24px, 2vw, 32px); }
 .dim figcaption span { font-size: 13px; color: #c9cff3; }
 .dim.is-open figcaption span { color: #e6ecff; }
