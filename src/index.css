@@ -98,7 +98,7 @@ p, li, figcaption span, .faq-list [data-slot="accordion-content"] { text-wrap: p
 .hero-copy { position: relative; z-index: 2; }
 .hero h1 { font-size: clamp(56px, 8.625vw, 166px); max-width: 5em; }
 .hero h1 em { display: block; }
-.hero-lead { font-size: clamp(18px, 1.98vw, 38px); font-weight: 500; line-height: 1.2; letter-spacing: -.015em; margin-top: clamp(24px, 2.6vw, 48px); }
+.hero-lead { max-width: min(24em, 40vw); font-size: clamp(20px, 2.2vw, 42px); font-weight: 500; line-height: 1.25; letter-spacing: -.015em; margin-top: clamp(24px, 2.6vw, 48px); }
 .button-row { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; margin-top: clamp(24px, 2.2vw, 40px); }
 .art.hero-art { position: absolute; z-index: 1; top: 8px; left: 38vw; width: 69vw; pointer-events: none; }
 
@@ -359,6 +359,7 @@ button.how-item:hover h3 { color: var(--blue); }
   .desktop-nav, .header-cta { display: none !important; }
   .menu-toggle { display: inline-flex; width: 44px; height: 44px; }
   .hero { min-height: 0; padding-block: 28px 0; }
+  .hero-lead { max-width: 24em; }
   .hero h1 { font-size: calc((100vw - 32px) / 4.9); }
   .art.hero-art { position: relative; top: auto; left: -14.5vw; width: 120vw; margin-top: 8px; }
   .button-row { gap: 20px; }
