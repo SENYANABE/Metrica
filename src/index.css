@@ -100,8 +100,7 @@ p, li, figcaption span, .faq-list [data-slot="accordion-content"] { text-wrap: p
 .hero h1 > span { display: block; }
 .hero h1 > span:first-child { text-wrap: nowrap; }
 .faq-list [data-slot="accordion-content"] a { color: var(--blue); text-decoration: underline; text-underline-offset: .18em; }
-.hero-detail { max-width: min(28em, 40vw); margin-top: 12px; font-size: clamp(16px, 1.3vw, 24px); line-height: 1.4; text-wrap: pretty; }
-.hero-lead { max-width: min(24em, 40vw); font-size: clamp(20px, 2.2vw, 42px); font-weight: 500; line-height: 1.25; letter-spacing: -.015em; margin-top: clamp(24px, 2.6vw, 48px); }
+.hero-lead { max-width: min(24em, 40vw); font-size: clamp(20px, 2.2vw, 42px); font-weight: 500; line-height: 1.25; letter-spacing: -.015em; margin-top: clamp(24px, 2.6vw, 48px); text-wrap: pretty; }
 .button-row { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; margin-top: clamp(24px, 2.2vw, 40px); }
 .art.hero-art { position: absolute; z-index: 1; top: 8px; left: 38vw; width: 69vw; pointer-events: none; }
 
@@ -366,7 +365,7 @@ button.how-item:hover h3 { color: var(--blue); }
   .desktop-nav, .header-cta { display: none !important; }
   .menu-toggle { display: inline-flex; width: 44px; height: 44px; }
   .hero { min-height: 0; padding-block: 28px 0; }
-  .hero-lead, .hero-detail { max-width: 24em; }
+  .hero-lead { max-width: 24em; }
   .hero h1 { font-size: calc((100vw - 32px) / 6.2); }
   .art.hero-art { position: relative; top: auto; left: -14.5vw; width: 120vw; margin-top: 8px; }
   .button-row { gap: 20px; }
@@ -393,4 +392,9 @@ button.how-item:hover h3 { color: var(--blue); }
   html { scroll-behavior: auto; }
   .art-float, .roll, .pop, .art-screen > img { animation: none; }
   *, *::before, *::after { transition-duration: 0s !important; }
+}
+
+/* The full audience lists must stay scrollable when a card exceeds the viewport. */
+@media (max-width: 1050px), (max-height: 900px) {
+  .aud-card { position: relative; top: auto; }
 }
