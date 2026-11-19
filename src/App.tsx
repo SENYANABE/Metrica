@@ -354,7 +354,7 @@ export default function App() {
       <section className="hero">
         <div className="container hero-copy">
           <h1><span><em>Открой</em> новое</span>{' '}<span>измерение</span>{' '}<span>обучения</span></h1>
-          <p className="hero-lead">{keepShortWords('Метрика — платформа для репетиторов, где все инструменты для работы собраны в одном месте')}</p>
+          <p className="hero-lead">{keepShortWords('Метрика — платформа для репетиторов, где все инструменты для работы собраны\u00a0в\u00a0одном\u00a0месте')}</p>
           <div className="button-row"><ApplyButton /></div>
         </div>
         <BannerArt art={heroArt} className="hero-art" />
